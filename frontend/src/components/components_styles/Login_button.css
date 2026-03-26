@@ -1,0 +1,10 @@
+.Login_button{
+    width: 100px;
+    height: 40px;
+    background: linear-gradient(to left, #E34D00, #7D2A00);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 20px;
+}
