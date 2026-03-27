@@ -163,10 +163,10 @@ const cytoscapeStyle = [
       label: "data(id)",
       "background-color": "#4f46e5",
       color: "#fff",
-      "font-size": "10px",
+      "font-size": "12px",
       "text-valign": "center",
       "text-halign": "center",
-      width: 60, height: 60,
+      width: 100, height: 100,
     },
   },
   {
