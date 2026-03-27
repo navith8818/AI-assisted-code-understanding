@@ -30,7 +30,7 @@ export default function Login1() {
         {/* HERO TITLE */}
         <div className="hero">
           <h1>Log In</h1>
-          <p className="hero-subtitle">Home &gt; Log In</p>
+          <p className="hero-subtitle"><Link to="/Home">Home</Link> &gt; Log In</p>
           {error && <p className="hero-error">{error}</p>}
         </div>
       </div>
