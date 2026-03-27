@@ -2,6 +2,7 @@ import { useState } from "react";
 import API from "../api";
 import { useNavigate, Link } from "react-router-dom";
 
+
 export default function Login() {
   const [form, setForm]   = useState({ username: "", password: "" });
   const [error, setError] = useState("");
@@ -39,17 +40,55 @@ export default function Login() {
 }
 
 const styles = {
-  container: { display:"flex", justifyContent:"center",
-               alignItems:"center", height:"100vh", background:"#f0f2f5" },
-  card:      { background:"white", padding:"2rem", borderRadius:"8px",
-               width:"360px", boxShadow:"0 2px 10px rgba(0,0,0,0.1)" },
-  title:     { marginBottom:"1.5rem", textAlign:"center" },
-  input:     { display:"block", width:"100%", padding:"0.6rem",
-               marginBottom:"1rem", borderRadius:"4px",
-               border:"1px solid #ccc", boxSizing:"border-box" },
-  button:    { width:"100%", padding:"0.7rem", background:"#4f46e5",
-               color:"white", border:"none", borderRadius:"4px",
-               cursor:"pointer", fontSize:"1rem" },
-  error:     { color:"red", marginBottom:"1rem" },
-  link:      { textAlign:"center", marginTop:"1rem" },
+  container: {
+    minHeight: "100vh",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#0b0b0b",
+    color: "#fff",
+    padding: "24px",
+  },
+  card: {
+    width: "100%",
+    maxWidth: "420px",
+    backgroundColor: "#1a1a1a",
+    borderRadius: "12px",
+    padding: "24px",
+    boxSizing: "border-box",
+  },
+  title: {
+    margin: "0 0 16px",
+    textAlign: "center",
+  },
+  error: {
+    color: "#ff8080",
+    marginBottom: "12px",
+    textAlign: "center",
+  },
+  input: {
+    width: "100%",
+    marginBottom: "12px",
+    padding: "12px",
+    borderRadius: "8px",
+    border: "1px solid #333",
+    backgroundColor: "#111",
+    color: "#fff",
+    boxSizing: "border-box",
+  },
+  button: {
+    width: "100%",
+    padding: "12px",
+    borderRadius: "8px",
+    border: "none",
+    backgroundColor: "#e34d00",
+    color: "#fff",
+    fontWeight: 700,
+    cursor: "pointer",
+  },
+  link: {
+    marginTop: "14px",
+    textAlign: "center",
+  },
 };
+
