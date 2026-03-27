@@ -24,9 +24,10 @@ export default function Login1() {
 
   return (
     <div className="page">
+      <HeaderNotLogged />
       <div className="top-section">
         <img className="top-bg-image" src={topBg} alt="" aria-hidden="true" />
-        <HeaderNotLogged />
+        
         {/* HERO TITLE */}
         <div className="hero">
           <h1>Log In</h1>
