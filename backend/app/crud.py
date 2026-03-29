@@ -101,3 +101,16 @@ async def delete_annotation(annotation_id: str):
         {"_id": ObjectId(annotation_id)}
     )
     return to_doc(result)
+
+async def delete_project(project_id: str):
+    result = await projects_col.find_one_and_delete(
+        {"_id": ObjectId(project_id)}
+    )
+    # Also delete all analyses belonging to this project
+    await analyses_col.delete_many({"project_id": project_id})
+    return to_doc(result)
+
+
+async def get_project(project_id: str):
+    result = await projects_col.find_one({"_id": ObjectId(project_id)})
+    return to_doc(result)

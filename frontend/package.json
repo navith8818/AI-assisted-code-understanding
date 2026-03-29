@@ -10,8 +10,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@fontsource/fira-code": "^5.2.7",
+    "@monaco-editor/react": "^4.7.0",
     "axios": "^1.13.6",
     "cytoscape": "^3.33.1",
+    "cytoscape-dagre": "^2.5.0",
     "react": "^19.2.4",
     "react-cytoscapejs": "^2.0.0",
     "react-dom": "^19.2.4",
