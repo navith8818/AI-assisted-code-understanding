@@ -5,7 +5,7 @@ body {
   color: white;
 }
 
-.page {
+.register-page {
   background-color: #0b0b0b;
   min-height: 100vh;
   padding-top: 0px;
@@ -68,7 +68,7 @@ overflow: hidden;
   
 }
 
-.hero-error{
+.register-form-error{
     color: #ff8080;
     margin-top: 16px;
     margin-bottom: 12px;
@@ -76,42 +76,30 @@ overflow: hidden;
   }
 
 
-.card {
-  width: 350px;
-  margin: 50px auto;
-  background: #1a1a1a;
+
+.register-form-card {
+  background:#1a1a1a ;
   padding: 30px;
   border-radius: 12px;
-  text-align: center;
+  width: 350px;
+  margin: 50px auto;
+  
 }
 
-.card form {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
 
-.input {
+
+.register-form-input {
   width: 100%;
   box-sizing: border-box;
   padding: 12px;
-  margin-bottom: 15px;
+  margin-bottom: 25px;
   background: #111;
   border: none;
   border-radius: 8px;
   color: white;
 }
 
-.forgot {
-  width: 100%;
-  text-align: right;
-  text-decoration: underline;
-  font-size: 12px;
-  margin-bottom: 15px;
-  color: gray;
-}
-
-.continue-btn {
+.register-form-button {
   width: 100%;
   box-sizing: border-box;
   padding: 12px;
@@ -120,43 +108,20 @@ overflow: hidden;
   border-radius: 8px;
   color: white;
   font-weight: bold;
-  margin-bottom: 15px;
-}
-
-.divider {
-  margin: 15px 0;
-  color: gray;
-}
-
-.google-btn {
-  width: 100%;
-  box-sizing: border-box;
-  padding: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  border-radius: 8px;
-  background: transparent;
-  border: 1px solid gray;
-  color: white;
-}
-
-.google-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 18px;
-  height: 18px;
-}
-
-.register {
-  margin-top: 15px;
-  font-size: 14px;
-}
-
-.register a{
-   color:#E34D00 ;
+  margin-bottom: 15px;   
   
 }
 
+
+
+.register-form-link {
+  margin-top: 15px;
+  font-size: 14px;
+
+}
+
+.register-form-link a{
+
+   color:#E34D00 ; 
+
+}
