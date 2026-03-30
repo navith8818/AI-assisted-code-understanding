@@ -10,7 +10,11 @@
 }
 .logo_div{
     width: 30%;
+    display: flex;
+    justify-content: center;
 }
 .header_button_div{
     width: 30%;
+    display: flex;
+    justify-content: center;
 }

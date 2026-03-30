@@ -4,6 +4,7 @@ import { useNavigate, Link } from "react-router-dom";
 import "./Login1.css";
 import topBg from "../assets/login-top-bg.png";
 import HeaderNotLogged from "../components/Shared/HeaderNotLogged";
+import Footer from "../components/Shared/Footer.jsx";
 
 export default function Login1() {
   const [form, setForm] = useState({username: "", password: "",});
@@ -79,6 +80,7 @@ export default function Login1() {
           <p className="register"><Link to="/register">I don't have an account</Link></p>
         </form>
       </div>
+      <Footer/>
     </div>
   );
 }

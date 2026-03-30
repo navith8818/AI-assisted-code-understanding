@@ -46,7 +46,7 @@ export default function Footer() {
             </div>
         </div>
         <div className="footer_inner_bottom">
-            <p>© 2024 All rights reserved.</p>
+            <p>© 2026 All rights reserved.</p>
         </div>
      
     </div>
