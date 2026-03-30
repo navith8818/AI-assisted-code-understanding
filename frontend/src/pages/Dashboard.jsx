@@ -125,6 +125,18 @@ export default function Dashboard() {
 
   useEffect(() => { loadProjects(); }, []);
 
+  useEffect(() => {
+    const cy = cyRef.current;
+    if (cy) {
+      // Ensure Cytoscape resizes to final container dimensions
+      cy.resize();
+      // Reset viewport to (0, 0) zoom level 1, then fit to graph
+      cy.pan({ x: 0, y: 0 });
+      cy.zoom(1.5);
+      cy.fit(undefined, 40);
+    }
+  }, [activeAnalysis, graphType, searchTerm]);
+
   const notify = (msg, type = "info") => {
     setStatus(msg); setStatusType(type);
     setTimeout(() => setStatus(""), 3000);
@@ -557,7 +569,7 @@ export default function Dashboard() {
         <CytoscapeComponent
           key={`${activeAnalysis.id}-${graphType}-${searchTerm}`}
           elements={elements}
-          style={{ width:"100%", height:"100%" }}
+          style={{ width:"100", height:"100%" }}
           layout={{
             name:             "dagre",       // directed acyclic graph — top to bottom
             rankDir:          "TB",          // TB = Top to Bottom
@@ -600,16 +612,15 @@ const layout = {
                overflow:"hidden", flexShrink:0 },
   main:      { flex:1, width:"100%", display:"flex", flexDirection:"column",
                overflow:"hidden" },
-  splitArea: { flex:1, display:"flex", overflow:"hidden" },
+  splitArea: { flex:1, display:"flex", overflow:"hidden", gap:0, margin:0, padding:0 },
 
   // Code panel — always visible, fixed width, resizable feel
-  codePanel: { width:"40%", minWidth:280, maxWidth:700,
+  codePanel: { flex: "0 0 40%", width:"100%", minWidth:280, maxWidth:700,
                borderRight:"1px solid var(--border)",
                display:"flex", flexDirection:"column",
-               overflow:"hidden", flexShrink:0,
-               background:"#1e1e2e" },
+               overflow:"hidden", background:"#1e1e2e" },
 
-  canvas:    { flex:1, overflow:"hidden" },
+  canvas:    { flex:"1 1 60%", minWidth:0, overflow:"hidden" }
 };
 const ui = {
   logo:        { fontFamily:"var(--font-head)", fontSize:18, fontWeight:800,

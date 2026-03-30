@@ -121,6 +121,7 @@ overflow: hidden;
   color: white;
   font-weight: bold;
   margin-bottom: 15px;
+  cursor: pointer;
 }
 
 .divider {
@@ -140,6 +141,7 @@ overflow: hidden;
   background: transparent;
   border: 1px solid gray;
   color: white;
+  cursor: pointer;
 }
 
 .google-icon {
