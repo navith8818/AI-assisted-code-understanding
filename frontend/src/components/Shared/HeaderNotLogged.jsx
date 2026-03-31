@@ -13,7 +13,9 @@ export default function HeaderNotLogged() {
       </div>
       <NavBar />
       <div className="header_button_div">
-        <Login_button text="Log in" />
+        <Link to="/Login">
+          <Login_button text="Log in" />
+        </Link>
       </div>
     </div>
   );

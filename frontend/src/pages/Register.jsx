@@ -4,7 +4,7 @@ import { useNavigate, Link } from "react-router-dom";
 import HeaderNotLogged from "../components/Shared/HeaderNotLogged";
 import "./Register.css";
 import topBg from "../assets/login-top-bg.png";
-
+import Footer from "../components/Shared/Footer.jsx";
 
 
 
@@ -53,6 +53,7 @@ export default function Register() {
         </form>
         <p className="register-form-link"><Link to="/login">Already have an account?</Link></p>
       </div>
+      <Footer/>
     </div>
   );
 }

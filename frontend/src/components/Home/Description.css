@@ -1,0 +1,221 @@
+.des_main{
+    width: 100%;
+    background-color: #121214;
+    display: flex;
+    flex-direction: column;
+    margin-top: 40px;
+  
+    
+}
+.des_header{
+    width: 90%;
+    padding: 20px 40px ;
+    margin: 0 auto;
+}
+.des_header h2{
+    font-size: 30px;
+}
+.des_inner{
+    width: 95%;
+    margin: 0 auto;
+}
+.des_inner_top{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+
+}
+.des_inner_top_left{
+    width: 60%;
+    height: 100%;
+    background-color: #1C1C1E;
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+}
+.des_inner_top_left .img_box{
+    width: 40%;
+    height: 100%;
+}
+.des_inner_top_left .img_box img{
+    width: 100%;
+    height: 100%;
+}
+.des_inner_top_left .text_box{
+   width: 40%;
+   padding: 30px 30px 0 50px;
+
+}
+.des_inner_top_left .text_box h5{
+    color: #E34D00;
+    font-size: 12px;
+    line-height: 0px;
+    font-family: 'Electrolize', sans-serif;
+}
+.des_inner_top_left .text_box h3{
+    font-size: 20px;
+    font-family: 'Sora', sans-serif;
+}
+.text_box p{
+    color: #939393;
+    font-size: 13px;
+    line-height: 20px;
+    font-family: 'Sora', sans-serif;
+}
+.des_inner_top_left .light_box{
+    width: 95%;
+    height: 60px;
+    background-color: #ffffff14;
+    padding: 0 30px 0 10px;
+    margin: 30px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+}
+.des_inner_top_right{
+    width: 40%;
+    border-radius: 12px;
+    padding: 0px 0px 0 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.des_inner_top_right_top{
+    width: 100%;
+    height: 240px;
+    background-color: #1C1C1E;
+    display: flex;
+    position: relative;
+    border-radius: 12px;
+}
+.des_inner_top_right_top img{
+    position: relative;
+    margin-left: auto;
+    width: 80%;
+    height: 100%;
+}
+.des_inner_top_right_top .text_box{
+    position: absolute; 
+    bottom: 0px;            
+    left: 0;
+    width: 70%;
+    padding: 0 20px;
+}
+.des_inner_top_right_top .text_box h5{
+    color: #939393;
+    font-size: 12px;
+    line-height: 0px;
+    font-family: 'Electrolize', sans-serif;
+}
+.des_inner_top_right_top .text_box h3{
+    font-size: 20px;
+    font-family: 'Sora', sans-serif;
+}
+.des_inner_top_right_bottom{
+    width: 100%;
+    height: 130px;
+    background-color: #1C1C1E;
+    border-radius: 12px;
+    display: flex;
+}
+.des_inner_top_right_bottom img{
+    width: 80px;
+    padding: 0 20px 0 30px;
+}
+.des_inner_top_right_bottom .text_box{
+    width: 100%;
+    padding: 0 20px 13px 0;
+    margin-top: auto;
+}
+.des_inner_top_right_bottom .text_box h5{
+    color: #939393;
+    font-size: 12px;
+    line-height: 0px;
+    font-family: 'Electrolize', sans-serif;
+}
+.des_inner_top_right_bottom .text_box h3{
+    font-size: 20px;
+    font-family: 'Sora', sans-serif;
+}
+.inner_bottom{
+    width: 100%;
+    margin: 15px 0 40px 0;
+    display: flex;
+}
+.inner_bottom_left{
+    width: 35%;
+    height: 100%;
+    background-color: #1C1C1E;
+    border-radius: 12px;
+    padding-bottom: 30px;
+}
+.inner_bottom_left .image_box{
+    width: auto;
+    padding: 20px 20px;
+}
+.inner_bottom_left .image_box img{
+    width: 100%;
+}
+.inner_bottom_left .text_box{
+    width: 80%;
+    padding: 0 15px;
+}
+.inner_bottom_left .text_box h5{
+    color: #E34D00;
+    font-size: 12px;
+    line-height: 0px;
+    font-family: 'Electrolize', sans-serif;
+    margin: 0;
+}
+.inner_bottom_left .text_box h3{
+    font-size: 20px;
+    font-family: 'Sora', sans-serif;
+    margin-bottom: 10px;
+}
+.inner_bottom_left .text_box p{
+    color: #939393;
+    font-size: 13px;
+    line-height: 20px;
+    font-family: 'Sora', sans-serif;
+}
+.inner_bottom_right{
+    width: 65%;
+    background-color: #1C1C1E;
+    margin-left: 20px;
+    display: flex;
+    border-radius: 12px;
+}
+.inner_bottom_right .image_box{
+    width: 60%;
+    padding: 20px;
+    
+}
+.inner_bottom_right .image_box img{
+    width: 100%;
+    height: 100%;
+}
+.inner_bottom_right .text_box{
+    width: 100%;
+    height: 100%;
+    padding: 50px 40px 0 30px;
+    box-sizing: border-box;
+}
+.inner_bottom_right .text_box h5{
+    color: #939393;
+    font-size: 12px;
+    line-height: 0px;
+    font-family: 'Electrolize', sans-serif;
+}
+.inner_bottom_right .text_box h3{
+    width: 70%;
+    font-size: 20px;
+    font-family: 'Sora', sans-serif;
+}
+.inner_bottom_right .text_box p{
+    width: 80%;
+    color: #939393;
+    font-size: 13px;
+    line-height: 20px;
+    font-family: 'Sora', sans-serif;
+}
