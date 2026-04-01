@@ -6,7 +6,7 @@ import topBg from "../assets/login-top-bg.png";
 import HeaderNotLogged from "../components/Shared/HeaderNotLogged";
 import Footer from "../components/Shared/Footer.jsx";
 
-export default function Login1() {
+export default function Login() {
   const [form, setForm] = useState({username: "", password: "",});
   const [error, setError] = useState("");
   const navigate          = useNavigate();

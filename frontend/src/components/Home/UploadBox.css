@@ -1,0 +1,98 @@
+.box_main {
+  width:            630px;
+  background-color: #121214;
+  position:         relative;
+  top:              -300px;
+  padding:          30px;
+  box-sizing:       border-box;
+  border:           2px solid #E34D00;
+}
+
+/* ── Text ──────────────────────────────────────────────── */
+.box_main .text_box h2 {
+  font-size:    30px;
+  margin-bottom: 8px;
+  color:        #ffffff;
+}
+.box_main .text_box p {
+  width:       90%;
+  color:       #a0a0b0;
+  font-size:   14px;
+  line-height: 1.6;
+}
+
+/* ── Drop zone ─────────────────────────────────────────── */
+.drop_zone {
+  display:         flex;
+  flex-direction:  column;
+  align-items:     center;
+  justify-content: center;
+  gap:             6px;
+  margin-top:      20px;
+  height:          90px;
+  border:          2px dashed #E34D00;
+  border-radius:   4px;
+  cursor:          pointer;
+  transition:      background 0.2s, border-color 0.2s;
+  background:      transparent;
+  user-select:     none;
+}
+
+/* Hover / drag-over */
+.drop_zone:hover,
+.drop_zone.dragging {
+  background:   rgba(227, 77, 0, 0.08);
+  border-color: #ff6a1f;
+}
+
+/* File selected */
+.drop_zone.has_file {
+  border-style: solid;
+  border-color: #E34D00;
+  background:   rgba(227, 77, 0, 0.06);
+}
+
+.drop_icon {
+  font-size: 28px;
+  line-height: 1;
+}
+.drop_label {
+  font-size: 14px;
+  color:     #c0c0d0;
+}
+.drop_label strong {
+  color: #E34D00;
+}
+.drop_filename {
+  font-size:   13px;
+  color:       #E34D00;
+  font-weight: 600;
+  max-width:   460px;
+  overflow:    hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.drop_sub {
+  font-size: 11px;
+  color:     #5a5a7a;
+}
+
+/* ── Status / error messages ───────────────────────────── */
+.upload_status {
+  margin-top: 10px;
+  font-size:  12px;
+  color:      #00ffa3;
+}
+.upload_error {
+  margin-top: 10px;
+  font-size:  12px;
+  color:      #ff4466;
+}
+
+/* ── Bottom row ────────────────────────────────────────── */
+.input_box {
+  display:     flex;
+  align-items: center;
+  padding-top: 16px;
+  box-sizing:  border-box;
+}

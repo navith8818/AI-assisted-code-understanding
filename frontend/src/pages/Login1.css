@@ -37,6 +37,7 @@ overflow: hidden;
 .top-section > .header_outer_div,
 .top-section > .hero {
   position: relative;
+  top: 50px;
   z-index: 1;
 }
 

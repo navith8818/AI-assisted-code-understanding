@@ -23,7 +23,6 @@ export default function App() {
         <Route path="/Demos"     element={<Demos />} />
         <Route path="/Help"  element={<Help />} />
         <Route path="/login"     element={<Login />} />
-        <Route path="/login1"     element={<Login1 />} /> 
         <Route path="/register"  element={<Register />} />
         <Route path="/dashboard" element={
           <PrivateRoute><Dashboard /></PrivateRoute>

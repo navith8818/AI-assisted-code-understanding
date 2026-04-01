@@ -5,7 +5,8 @@ import dagre          from "cytoscape-dagre";
 import API from "../api";
 import CodeViewer from "../components/CodeViewer";
 import { fetchFileCode } from "../api";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link} from "react-router-dom";
+import logo from "../sources/logo.svg"
 
 // ── Node type colors ──────────────────────────────────────
 const TYPE_COLOR = {
@@ -64,7 +65,7 @@ const CY_STYLE = [
     style: {
       "border-color":  "#ffffff",
       "border-width":  3,
-      "font-size":     "12px",
+      "font-size":     "22px",
       opacity:         1,
     },
   },
@@ -337,11 +338,11 @@ export default function Dashboard() {
       <aside style={layout.sidebar}>
 
         {/* Logo */}
-        <div style={ui.logo}>
-          <span style={{color:"var(--accent)"}}>{"<"}</span>
-          CodeGraph
-          <span style={{color:"var(--accent)"}}>{">"}</span>
-        </div>
+        <Link to = "/Home">
+          <div style={ui.logo}>
+            <img src= {logo} alt="logo" width="150px" />
+          </div>
+        </Link>
 
         {/* Upload */}
         <label style={ui.uploadBtn}>

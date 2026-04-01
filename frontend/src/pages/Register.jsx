@@ -25,10 +25,10 @@ export default function Register() {
 
   return (
     
-    <div className="register-page">  
+    <div className="page">  
+      <HeaderNotLogged/> 
        <div className="top-section">
-        <img className="top-bg-image" src={topBg} alt="" aria-hidden="true" />
-           <HeaderNotLogged/>    
+        <img className="top-bg-image" src={topBg} alt="" aria-hidden="true" />   
         <div className="hero">
           <h1>Register</h1>
           <p className="hero-subtitle"><Link to="/Home">Home</Link> &gt; Register</p>
