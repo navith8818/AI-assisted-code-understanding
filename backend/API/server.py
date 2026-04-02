@@ -5,7 +5,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.routes import auth, projects
+from app.routes import auth, projects, chat
 
 app = FastAPI(title="Code Analyzer API")
 
@@ -20,3 +20,4 @@ app.add_middleware(
 
 app.include_router(auth.router)
 app.include_router(projects.router)
+app.include_router(chat.router)

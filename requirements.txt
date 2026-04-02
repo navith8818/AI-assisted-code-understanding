@@ -14,3 +14,4 @@ tree-sitter-c==0.21.4
 tree-sitter-cpp==0.22.0
 tree-sitter-javascript==0.25.0
 networkx==3.4.2
+google-genai>=0.3.0

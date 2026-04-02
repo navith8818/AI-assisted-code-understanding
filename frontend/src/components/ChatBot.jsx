@@ -6,7 +6,7 @@ const initialMessages = [
   {
     id: 1,
     sender: "gemini",
-    text: "Hi there! I’m Gemini Free Chat. Ask me anything about this website.",
+    text: "Hi there! I'm FlowGen Assistant, powered by Gemini AI. Ask me anything about this platform, code analysis, or how to use our visualization tools!",
   },
 ];
 
@@ -39,6 +39,8 @@ export default function ChatBot() {
   const [input, setInput] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [isSendHover, setIsSendHover] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
@@ -48,7 +50,7 @@ export default function ChatBot() {
 
   const handleSend = async (event) => {
     event.preventDefault();
-    if (!input.trim()) return;
+    if (!input.trim() || isLoading) return;
 
     const userMessage = {
       id: Date.now(),
@@ -59,12 +61,70 @@ export default function ChatBot() {
     setMessages((prev) => [...prev, userMessage]);
     setInput("");
     setIsOpen(true);
+    setIsLoading(true);
+    setError(null);
 
-    const botText = getBotResponse(input);
-    const botMessage = { id: Date.now() + 1, sender: "gemini", text: botText };
-    setTimeout(() => {
+    try {
+      // Call backend chat endpoint
+      const token = localStorage.getItem("token");
+      if (!token) {
+        throw new Error("Not authenticated. Please log in.");
+      }
+
+      const response = await fetch("http://localhost:8000/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          content: userMessage.text,
+        }),
+      });
+
+      if (!response.ok) {
+        if (response.status === 401) {
+          throw new Error("Session expired. Please log in again.");
+        }
+        throw new Error(`Server error: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      const botMessage = {
+        id: Date.now() + 1,
+        sender: "gemini",
+        text: data.response || "Sorry, I couldn't process that request.",
+      };
+
       setMessages((prev) => [...prev, botMessage]);
-    }, 300);
+    } catch (err) {
+      const errorText = err.message || "Failed to get response from AI assistant";
+      setError(errorText);
+      const errorMessage = {
+        id: Date.now() + 1,
+        sender: "gemini",
+        text: `❌ Error: ${errorText}. Please check your connection and try again.`,
+      };
+      setMessages((prev) => [...prev, errorMessage]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleLoadingMessage = () => {
+    if (isLoading) {
+      return (
+        <div style={{ ...styles.message, ...styles.geminiBubble }}>
+          <span style={styles.sender}>Gemini</span>
+          <span style={styles.text}>
+            <span style={styles.loadingDot}>●</span>
+            <span style={styles.loadingDot}>●</span>
+            <span style={styles.loadingDot}>●</span>
+          </span>
+        </div>
+      );
+    }
+    return null;
   };
 
   return (
@@ -78,6 +138,7 @@ export default function ChatBot() {
             value={input}
             placeholder="Ask about the site..."
             onChange={(e) => setInput(e.target.value)}
+            disabled={isLoading}
           />
         </div>
         <button
@@ -85,9 +146,11 @@ export default function ChatBot() {
           style={{
             ...styles.bottomSendButton,
             ...(isSendHover ? styles.bottomSendButtonHover : {}),
+            ...(isLoading ? styles.bottomSendButtonDisabled : {}),
           }}
-          onMouseEnter={() => setIsSendHover(true)}
+          onMouseEnter={() => !isLoading && setIsSendHover(true)}
           onMouseLeave={() => setIsSendHover(false)}
+          disabled={isLoading}
         >
           <img src={sendMailIcon} alt="Send" style={styles.sendIcon} />
         </button>
@@ -97,7 +160,7 @@ export default function ChatBot() {
         <div style={styles.overlay}>
           <div style={styles.panel}>
             <div style={styles.panelHeader}>
-              <span>Gemini Free Chat</span>
+              <span>FlowGen AI Assistant</span>
               <button
                 style={styles.closeButton}
                 onClick={() => setIsOpen(false)}
@@ -122,6 +185,7 @@ export default function ChatBot() {
                   <span style={styles.text}>{message.text}</span>
                 </div>
               ))}
+              {handleLoadingMessage()}
               <div ref={messagesEndRef} />
             </div>
             <form style={styles.form} onSubmit={handleSend}>
@@ -131,9 +195,13 @@ export default function ChatBot() {
                 value={input}
                 placeholder="Ask about the site..."
                 onChange={(e) => setInput(e.target.value)}
+                disabled={isLoading}
               />
-              <button type="submit" style={styles.button}>
-                Send
+              <button type="submit" style={{
+                ...styles.button,
+                ...(isLoading ? styles.buttonDisabled : {}),
+              }} disabled={isLoading}>
+                {isLoading ? "..." : "Send"}
               </button>
             </form>
           </div>
@@ -260,8 +328,8 @@ const styles = {
   },
   userBubble: {
     alignSelf: "flex-end",
-    background: "#44d7b6",
-    color: "#111",
+    background: "#e34c00e1",
+    color: "#fff",
   },
   geminiBubble: {
     alignSelf: "flex-start",
@@ -294,12 +362,25 @@ const styles = {
     outline: "none",
   },
   button: {
-    background: "#44d7b6",
+    background: "#E34D00",
     border: "none",
     borderRadius: "8px",
-    color: "#111",
+    color: "#fff",
     fontWeight: "bold",
     padding: "0 16px",
     cursor: "pointer",
+    transition: "opacity 0.2s",
+  },
+  buttonDisabled: {
+    opacity: 0.6,
+    cursor: "not-allowed",
+  },
+  bottomSendButtonDisabled: {
+    opacity: 0.6,
+    cursor: "not-allowed",
+  },
+  loadingDot: {
+    animation: "pulse 1.4s infinite",
+    marginRight: "2px",
   },
 };
