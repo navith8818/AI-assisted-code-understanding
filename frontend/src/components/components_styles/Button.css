@@ -1,4 +1,4 @@
-.Button{
+.Button {
     width: 180px;
     height: 40px;
     background-color: #E34D00;
@@ -7,4 +7,24 @@
     border-radius: 5px;
     cursor: pointer;
     font-size: 20px;
+    /* Required for the absolute positioned line */
+    position: relative; 
+}
+
+/* Creating the line */
+.Button::after {
+    content: "";
+    position: absolute;
+    left: 50%;           /* Move to middle */
+    bottom: -10px;       /* 30px margin below button */
+    width: 0;            /* Start with no width */
+    height: 3px;         /* Thickness of the line */
+    background-color: #E34D00;
+    transition: all 0.4s ease;
+    transform: translateX(-50%); /* Centering trick */
+}
+
+/* Animation on hover */
+.Button:hover::after {
+    width: 90%;         /* Grow to full width of button */
 }

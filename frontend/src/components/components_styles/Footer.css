@@ -51,10 +51,28 @@
     margin: 20px 0 40px 0;
 }
 .footer_inner_center a{
+    width:fit-content;
     display: flex;
     gap: 10px;
     color: #fff;
     text-decoration: none;
+    position: relative; 
+}
+.footer_inner_center a::after {
+    content: "";
+    position: absolute;
+    left: 0%;           /* Move to middle */
+    bottom: -4px;       /* 30px margin below button */
+    width: 0;            /* Start with no width */
+    height: 3px;         /* Thickness of the line */
+    background-color: #E34D00;
+    transition: all 0.4s ease;
+    /* Centering trick */
+}
+
+/* Animation on hover */
+.footer_inner_center a:hover::after {
+    width: 90%;         /* Grow to full width of button */
 }
 .footer_inner_right{
     width: 30%;
