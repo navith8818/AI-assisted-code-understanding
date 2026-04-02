@@ -4,7 +4,7 @@ import "./Hexagon.css";
 const GAP = 3;
 const HEX_OUTER = 70;
 const HEX_INNER = HEX_OUTER - GAP;
-const COLORS = ["#ff00ff", "#00ffff", "#ff6600", "#00ff88", "#ff0066", "#7700ff"];
+const COLORS = ["#ff6600", "#ff00ff", "#00ffff",  "#00ff88", "#ff0066", "#7700ff"];
 const ROW_COUNTS = [6, 7, 8, 7, 6];
 
 export default function Hexagon() {

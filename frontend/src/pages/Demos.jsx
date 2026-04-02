@@ -1,17 +1,26 @@
-import Hero from "../components/Home/Hero.jsx";
+import Shared_Hero from "../components/Shared/Shared_Hero.jsx";
 import HeaderNotLogged from "../components/Shared/HeaderNotLogged.jsx";
-export default function Demos(){
-    return (
-        <main style ={styles.container}>
-            <Hero/>
-            <HeaderNotLogged />
-        
-        </main>
-    )
+import D_Section from "../components/Demos Components/D_Section.jsx";
+import Footer from "../components/Shared/Footer.jsx";
+export default function Demos() {
+  return (
+    <main style={styles.container}>
+        <HeaderNotLogged />
+        <Shared_Hero
+            heading="Demos"
+            paragraph="Explore real examples of code transformed 
+                into interactive visualizations. See how complex logic 
+                becomes clear through synchronized flowcharts, guided 
+                tracing, and intelligent analysis in action."
+        />
+        <D_Section />
+        <Footer />   
+    </main>
+  );
 }
 
 const styles = {
-    container: {
-        background : "#121214", 
-    }
-}
+  container: {
+    background: "#121214",
+  },
+};

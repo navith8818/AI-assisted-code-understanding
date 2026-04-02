@@ -6,6 +6,7 @@
   padding:          30px;
   box-sizing:       border-box;
   border:           2px solid #E34D00;
+  animation: slideDown 0.8s ease-out forwards;
 }
 
 /* ── Text ──────────────────────────────────────────────── */

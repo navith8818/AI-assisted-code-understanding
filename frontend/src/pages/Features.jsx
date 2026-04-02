@@ -1,17 +1,24 @@
-import Hero from "../components/Home/Hero.jsx";
+import Shared_Hero from "../components/Shared/Shared_Hero.jsx";
+import F_Section from "../components/Features Components/F_Section.jsx";
+import Footer from "../components/Shared/Footer.jsx";
 import HeaderNotLogged from "../components/Shared/HeaderNotLogged.jsx";
-export default function Features(){
-    return (
-        <main style ={styles.container}>
-            <Hero/>
-            <HeaderNotLogged />
-        
-        </main>
-    )
+export default function Features() {
+  return (
+    <main style={styles.container}>
+      <HeaderNotLogged />
+      <Shared_Hero
+        heading="Features"
+        paragraph="Instantly understand any codebase with interactive visualizations.
+          Explore functions, classes, and dependencies through synchronized
+          flowcharts and source code."
+      />
+      <F_Section />
+      <Footer />
+    </main>
+  );
 }
-
 const styles = {
-    container: {
-        background : "#121214", 
-    }
-}
+  container: {
+    background: "#121214",
+  },
+};

@@ -1,17 +1,28 @@
-import Hero from "../components/Home/Hero.jsx";
+import Shared_Hero from "../components/Shared/Shared_Hero.jsx";
+import H_Section from "../components/Help Components/H_Section.jsx";
 import HeaderNotLogged from "../components/Shared/HeaderNotLogged.jsx";
-export default function Help(){
-    return (
-        <main style ={styles.container}>
-            <Hero/>
-            <HeaderNotLogged />
-        
-        </main>
-    )
+import Footer from "../components/Shared/Footer.jsx";
+export default function Help() {
+  return (
+    <main style={styles.container}>
+      <HeaderNotLogged />
+      <Shared_Hero
+        heading="Help"
+        paragraph="Learn how to upload code, 
+        navigate visualizations, and explore 
+        program logic step by step. This guide 
+        walks you through using the platform 
+        effectively to analyze, trace, and understand 
+        your codebase with ease."
+      />
+      <H_Section />
+      <Footer />
+    </main>
+  );
 }
 
 const styles = {
-    container: {
-        background : "#121214", 
-    }
-}
+  container: {
+    background: "#121214",
+  },
+};

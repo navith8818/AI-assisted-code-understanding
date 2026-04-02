@@ -7,6 +7,14 @@
     height: 100vh;
     display: flex;
 }
+@keyframes float {
+  from {
+    transform: translateY(0px);
+  }
+  to {
+    transform: translateY(-20px); /* Adjust this for higher/lower bounce */
+  }
+}
 .exp_left{
     width: 40%;
     height: 100%;
@@ -83,6 +91,7 @@
     position: relative;
     left: 20px;
     z-index: 2;
+    animation: float 1.5s ease-in-out infinite alternate;
 }
 .ellips1{
     width: 30%;

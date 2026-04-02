@@ -10,4 +10,5 @@
   position: absolute;
   top: 0px;
   left: 0px;
+  animation: slideDown 1.0s ease-out forwards;
 }
