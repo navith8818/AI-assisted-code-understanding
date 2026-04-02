@@ -90,7 +90,7 @@
     margin-top: 40px;
     position: relative;
     left: 20px;
-    z-index: 2;
+    z-index: 1;
     animation: float 1.5s ease-in-out infinite alternate;
 }
 .ellips1{
