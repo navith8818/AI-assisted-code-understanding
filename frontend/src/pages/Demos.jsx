@@ -2,6 +2,7 @@ import Shared_Hero from "../components/Shared/Shared_Hero.jsx";
 import HeaderNotLogged from "../components/Shared/HeaderNotLogged.jsx";
 import D_Section from "../components/Demos Components/D_Section.jsx";
 import Footer from "../components/Shared/Footer.jsx";
+import ChatBot from "../components/ChatBot.jsx";
 export default function Demos() {
   return (
     <main style={styles.container}>
@@ -14,6 +15,7 @@ export default function Demos() {
                 tracing, and intelligent analysis in action."
         />
         <D_Section />
+        <ChatBot />
         <Footer />   
     </main>
   );

@@ -2,6 +2,7 @@ import Shared_Hero from "../components/Shared/Shared_Hero.jsx";
 import H_Section from "../components/Help Components/H_Section.jsx";
 import HeaderNotLogged from "../components/Shared/HeaderNotLogged.jsx";
 import Footer from "../components/Shared/Footer.jsx";
+import ChatBot from "../components/ChatBot.jsx";
 export default function Help() {
   return (
     <main style={styles.container}>
@@ -16,6 +17,7 @@ export default function Help() {
         your codebase with ease."
       />
       <H_Section />
+      <ChatBot />
       <Footer />
     </main>
   );
