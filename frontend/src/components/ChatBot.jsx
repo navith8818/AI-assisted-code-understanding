@@ -2,6 +2,88 @@ import { useEffect, useRef, useState } from "react";
 import aiIcon from "../assets/icon-AI.png";
 import sendMailIcon from "../assets/send-mail.svg";
 
+// Function to render markdown-like formatting
+const renderMessageContent = (text) => {
+  // Split by lines first
+  const lines = text.split("\n");
+  const elements = [];
+
+  lines.forEach((line, lineIndex) => {
+    // Handle headers (##, ###, etc.)
+    const headerMatch = line.match(/^(#{1,6})\s+(.+)$/);
+    if (headerMatch) {
+      const level = headerMatch[1].length;
+      const fontSize = 16 - level;
+      elements.push(
+        <div key={`header-${lineIndex}`} style={{ marginTop: "8px", marginBottom: "4px" }}>
+          <strong style={{ fontSize: `${fontSize}px`, color: "#E34D00" }}>
+            {headerMatch[2]}
+          </strong>
+        </div>
+      );
+      return;
+    }
+
+    // Handle code blocks (```code```)
+    if (line.trim().startsWith("```") || line.trim().endsWith("```")) {
+      elements.push(
+        <div
+          key={`code-${lineIndex}`}
+          style={{
+            background: "#0a0a0d",
+            padding: "4px 6px",
+            borderRadius: "4px",
+            fontFamily: "monospace",
+            fontSize: "0.85rem",
+            color: "#00ff00",
+            marginBottom: "4px",
+            overflowX: "auto",
+          }}
+        >
+          {line.replace(/```/g, "")}
+        </div>
+      );
+      return;
+    }
+
+    // Handle bullet points
+    if (line.trim().startsWith("•") || line.trim().startsWith("-")) {
+      elements.push(
+        <div key={`bullet-${lineIndex}`} style={{ marginLeft: "16px", marginBottom: "4px" }}>
+          {line}
+        </div>
+      );
+      return;
+    }
+
+    // Handle bold text (**text**)
+    const parts = line.split(/(\*\*[^*]+\*\*)/g);
+    const lineParts = parts.map((part, partIndex) => {
+      if (part.startsWith("**") && part.endsWith("**")) {
+        return (
+          <strong key={`${lineIndex}-${partIndex}`} style={{ color: "#E34D00" }}>
+            {part.slice(2, -2)}
+          </strong>
+        );
+      }
+      return part;
+    });
+
+    // Add line with proper spacing
+    if (line.trim() === "") {
+      elements.push(<div key={`empty-${lineIndex}`} style={{ height: "8px" }} />);
+    } else {
+      elements.push(
+        <div key={`line-${lineIndex}`} style={{ marginBottom: "6px", lineHeight: "1.5" }}>
+          {lineParts}
+        </div>
+      );
+    }
+  });
+
+  return elements;
+};
+
 const initialMessages = [
   {
     id: 1,
@@ -65,17 +147,11 @@ export default function ChatBot() {
     setError(null);
 
     try {
-      // Call backend chat endpoint
-      const token = localStorage.getItem("token");
-      if (!token) {
-        throw new Error("Not authenticated. Please log in.");
-      }
-
+      // Call backend chat endpoint (no authentication required)
       const response = await fetch("http://localhost:8000/chat", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
           content: userMessage.text,
@@ -182,7 +258,11 @@ export default function ChatBot() {
                   <span style={styles.sender}>
                     {message.sender === "user" ? "You" : "Gemini"}
                   </span>
-                  <span style={styles.text}>{message.text}</span>
+                  <div style={styles.text}>
+                    {message.sender === "gemini"
+                      ? renderMessageContent(message.text)
+                      : message.text}
+                  </div>
                 </div>
               ))}
               {handleLoadingMessage()}
@@ -325,6 +405,8 @@ const styles = {
     padding: "8px 10px",
     borderRadius: "10px",
     maxWidth: "85%",
+    wordWrap: "break-word",
+    overflowWrap: "break-word",
   },
   userBubble: {
     alignSelf: "flex-end",
@@ -343,7 +425,9 @@ const styles = {
   },
   text: {
     fontSize: "0.95rem",
-    lineHeight: 1.4,
+    lineHeight: 1.5,
+    whiteSpace: "pre-wrap",
+    wordWrap: "break-word",
   },
   form: {
     display: "flex",

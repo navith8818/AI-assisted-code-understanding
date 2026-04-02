@@ -52,22 +52,31 @@ IMPORTANT GUIDELINES:
 6. Use the knowledge provided above as the source of truth about the platform
 7. If you don't have specific information about something, suggest the user check the Help section or contact support
 
+FORMATTING INSTRUCTIONS:
+- Use markdown formatting for better readability
+- Use **bold** for important terms and key concepts
+- Use ## Headers for main topics
+- Use bullet points (•) or numbered lists for steps and features
+- Add line breaks between sections for spacing
+- Use code blocks with triple backticks for any code examples
+- Keep paragraphs short and concise
+- Use line breaks liberally to improve readability
+
 CONVERSATION STYLE:
 - Be conversational and helpful
 - Use simple language when possible
 - Provide examples when explaining features
 - Ask follow-up questions if clarification is needed
-- Always stay in character as the platform's AI assistant
-"""
+- Always stay in character as the platform's AI assistant"""
 
 @router.post("/chat", response_model=ChatResponse)
 async def chat(
     message: ChatMessage,
-    current_user: dict = Depends(get_current_user),
 ):
     """
     Chat endpoint using Google Gemini API.
     Provides intelligent responses about the platform with context from the knowledge base.
+    No authentication required - available to all users.
     """
     try:
         # Check if message is relevant to the project
@@ -112,10 +121,11 @@ async def chat(
 
 
 @router.get("/chat/features")
-async def get_features(current_user: dict = Depends(get_current_user)):
+async def get_features():
     """
     Returns a list of platform features.
     Useful for the chatbot to suggest capabilities.
+    No authentication required.
     """
     return {
         "features": get_project_features()
