@@ -4,6 +4,7 @@ import D_Section from "../components/Demos Components/D_Section.jsx";
 import Footer from "../components/Shared/Footer.jsx";
 import DemoLeftCard from "../components/Demos Components/D_DemoLeftCard.jsx";
 import DemoRightCard from "../components/Demos Components/D_DemoRightCard.jsx";
+import BookLiveDemo from "../components/Demos Components/BookLiveDemo.jsx";
 import ChatBot from "../components/ChatBot.jsx";
 import video from "../assets/testVid.mp4"
 export default function Demos() {
@@ -34,6 +35,8 @@ export default function Demos() {
                   , visual representation for easy understanding" 
         myVideo={video}
       />
+      
+      <BookLiveDemo />
       
       {/* <D_Section /> */}
       <ChatBot />
