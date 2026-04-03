@@ -1,6 +1,6 @@
 from datetime import datetime
 from bson import ObjectId
-from app.database import users_col, projects_col, analyses_col, annotations_col
+from app.database import users_col, projects_col, analyses_col, annotations_col, bookings_col
 
 
 def to_doc(d):
@@ -113,4 +113,56 @@ async def delete_project(project_id: str):
 
 async def get_project(project_id: str):
     result = await projects_col.find_one({"_id": ObjectId(project_id)})
+    return to_doc(result)
+
+
+# ── BOOKINGS ───────────────────────────────────────────────
+
+async def create_booking(full_name: str, email: str, company: str, slot_id: int, slot_date: str, slot_time: str, message: str):
+    booking = {
+        "full_name": full_name,
+        "email": email,
+        "company": company,
+        "slot_id": slot_id,
+        "slot_date": slot_date,
+        "slot_time": slot_time,
+        "message": message,
+        "status": "confirmed",
+        "created_at": datetime.utcnow(),
+    }
+    result = await bookings_col.insert_one(booking)
+    return to_doc({**booking, "_id": result.inserted_id})
+
+
+async def get_all_bookings():
+    """Get all bookings for admin purposes."""
+    bookings = []
+    async for booking in bookings_col.find():
+        bookings.append(to_doc(booking))
+    return bookings
+
+
+async def get_booked_slots():
+    """Get all booked slot IDs to determine availability."""
+    booked_slots = []
+    async for booking in bookings_col.find({"status": "confirmed"}):
+        booked_slots.append(booking["slot_id"])
+    return booked_slots
+
+
+async def get_user_bookings(email: str):
+    """Get all bookings for a specific user email."""
+    bookings = []
+    async for booking in bookings_col.find({"email": email}):
+        bookings.append(to_doc(booking))
+    return bookings
+
+
+async def cancel_booking(booking_id: str):
+    """Cancel a booking by setting status to cancelled."""
+    result = await bookings_col.find_one_and_update(
+        {"_id": ObjectId(booking_id)},
+        {"$set": {"status": "cancelled"}},
+        return_document=True
+    )
     return to_doc(result)

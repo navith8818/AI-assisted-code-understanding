@@ -61,3 +61,33 @@ class AnnotationOut(AnnotationCreate):
     id: str
     analysis_id: str
     created_at: datetime
+
+# ── What the frontend sends to BOOK A DEMO ──
+class DemoBookingCreate(BaseModel):
+    full_name: str
+    email: str
+    company: Optional[str] = None
+    slot_id: int
+    slot_date: str
+    slot_time: str
+    message: Optional[str] = None
+
+# ── What we send back for a demo booking ──
+class DemoBookingOut(BaseModel):
+    id: str
+    full_name: str
+    email: str
+    company: Optional[str]
+    slot_id: int
+    slot_date: str
+    slot_time: str
+    message: Optional[str]
+    created_at: datetime
+    status: str = "confirmed"  # confirmed, cancelled, completed
+
+# ── What we send back for available demo slots ──
+class DemoSlotOut(BaseModel):
+    id: int
+    date: str
+    time: str
+    available: bool
