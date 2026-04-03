@@ -1,5 +1,4 @@
 import "./F_Section.css"
-import Button from "../Shared/Button"
 import ContentBox from "../Shared/ContentBox";
 import BoxImg1 from "../../assets/Screenshot1.png"
 import BoxImg2 from "../../assets/Screenshot2.png"

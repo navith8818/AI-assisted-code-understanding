@@ -54,8 +54,9 @@
 }
 
 .drop_icon {
-  font-size: 28px;
+  font-size: 20px;
   line-height: 1;
+  padding-top: 10px;
 }
 .drop_label {
   font-size: 14px;

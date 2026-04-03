@@ -1,8 +1,9 @@
 import Shared_Hero from "../components/Shared/Shared_Hero.jsx";
-import H_Section from "../components/Help Components/H_Section.jsx";
+
 import HeaderNotLogged from "../components/Shared/HeaderNotLogged.jsx";
 import Footer from "../components/Shared/Footer.jsx";
 import ChatBot from "../components/ChatBot.jsx";
+import FAQ from "../components/FAQ.jsx";
 export default function Help() {
   return (
     <main style={styles.container}>
@@ -16,7 +17,8 @@ export default function Help() {
         effectively to analyze, trace, and understand 
         your codebase with ease."
       />
-      <H_Section />
+
+      <FAQ />
       <ChatBot />
       <Footer />
     </main>
