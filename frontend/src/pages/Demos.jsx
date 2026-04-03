@@ -6,7 +6,8 @@ import DemoLeftCard from "../components/Demos Components/D_DemoLeftCard.jsx";
 import DemoRightCard from "../components/Demos Components/D_DemoRightCard.jsx";
 import BookLiveDemo from "../components/Demos Components/BookLiveDemo.jsx";
 import ChatBot from "../components/ChatBot.jsx";
-import video from "../assets/testVid.mp4"
+import GraphGenvid from "../assets/GraphGenvid.mp4";
+import NodeSelectVid from "../assets/NodeSelectVid.mp4";
 export default function Demos() {
   return (
     <main style={styles.container}>
@@ -19,25 +20,30 @@ export default function Demos() {
                 tracing, and intelligent analysis in action."
       />
       <DemoLeftCard
-        span="Interactive"
-        heading=" Flowchart Demo"
-        paragraph="Upload your codebase and generate an interactive flowchart in a single click. 
-                  This demo shows how the platform instantly analyzes your code and transforms it into a clear
-                  , visual representation for easy understanding" 
-        myVideo={video}
+        span="Flowchart "
+        heading=" Generation Guide"
+        paragraph="This guide demonstrates how the platform automatically 
+        generates flowcharts from uploaded code. It highlights the 
+        process of analyzing source code, extracting key structures,
+        and transforming them into clear, interactive visual 
+        representations for easier understanding."
+        myVideo={GraphGenvid}
       />
-      
+
       <DemoRightCard
-        span="Interactive"
-        heading=" Flowchart Demo"
-        paragraph="Upload your codebase and generate an interactive flowchart in a single click. 
-                  This demo shows how the platform instantly analyzes your code and transforms it into a clear
-                  , visual representation for easy understanding" 
-        myVideo={video}
+        span="Graph "
+        heading=" Dependency Viewer"
+        paragraph="This demonstration shows how users can 
+        interact with the graph to explore dependencies 
+        between different components. By clicking on nodes,
+        the system highlights related functions, classes,
+        and connections, enabling a clear understanding 
+        of how different parts of the codebase are linked."
+        myVideo={NodeSelectVid}
       />
-      
+
       <BookLiveDemo />
-      
+
       {/* <D_Section /> */}
       <ChatBot />
       <Footer />

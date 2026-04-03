@@ -2,8 +2,6 @@
     width: 100%;
     display: flex;
     justify-content: center; 
-    position: relative;
-    top: -130px;
 }
 .flex_container{
     width: 80%;

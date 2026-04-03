@@ -1,5 +1,6 @@
 import "./D_DemoRightCard.css"
 import Button from "../Shared/Button"
+import { Link } from "react-router-dom";
 export default function DemoRightCard({span, heading, paragraph, myVideo}){
     return(
         <div className = "OuterContainer">
@@ -12,10 +13,9 @@ export default function DemoRightCard({span, heading, paragraph, myVideo}){
             <div className="R_inner_right_container">
                 <h2><span>{span}</span> {heading}</h2>
                 <p>{paragraph}</p>
-                <Button
-                          text={"Try out"}
-                          
-                        />
+                <Link to = "/Dashboard" >
+                    <Button text={"Try out"} />
+                </ Link>
             </div>
             
         </div>

@@ -15,11 +15,14 @@ const renderMessageContent = (text) => {
       const level = headerMatch[1].length;
       const fontSize = 16 - level;
       elements.push(
-        <div key={`header-${lineIndex}`} style={{ marginTop: "8px", marginBottom: "4px" }}>
+        <div
+          key={`header-${lineIndex}`}
+          style={{ marginTop: "8px", marginBottom: "4px" }}
+        >
           <strong style={{ fontSize: `${fontSize}px`, color: "#E34D00" }}>
             {headerMatch[2]}
           </strong>
-        </div>
+        </div>,
       );
       return;
     }
@@ -41,7 +44,7 @@ const renderMessageContent = (text) => {
           }}
         >
           {line.replace(/```/g, "")}
-        </div>
+        </div>,
       );
       return;
     }
@@ -49,9 +52,12 @@ const renderMessageContent = (text) => {
     // Handle bullet points
     if (line.trim().startsWith("•") || line.trim().startsWith("-")) {
       elements.push(
-        <div key={`bullet-${lineIndex}`} style={{ marginLeft: "16px", marginBottom: "4px" }}>
+        <div
+          key={`bullet-${lineIndex}`}
+          style={{ marginLeft: "16px", marginBottom: "4px" }}
+        >
           {line}
-        </div>
+        </div>,
       );
       return;
     }
@@ -61,7 +67,10 @@ const renderMessageContent = (text) => {
     const lineParts = parts.map((part, partIndex) => {
       if (part.startsWith("**") && part.endsWith("**")) {
         return (
-          <strong key={`${lineIndex}-${partIndex}`} style={{ color: "#E34D00" }}>
+          <strong
+            key={`${lineIndex}-${partIndex}`}
+            style={{ color: "#E34D00" }}
+          >
             {part.slice(2, -2)}
           </strong>
         );
@@ -71,12 +80,17 @@ const renderMessageContent = (text) => {
 
     // Add line with proper spacing
     if (line.trim() === "") {
-      elements.push(<div key={`empty-${lineIndex}`} style={{ height: "8px" }} />);
+      elements.push(
+        <div key={`empty-${lineIndex}`} style={{ height: "8px" }} />,
+      );
     } else {
       elements.push(
-        <div key={`line-${lineIndex}`} style={{ marginBottom: "6px", lineHeight: "1.5" }}>
+        <div
+          key={`line-${lineIndex}`}
+          style={{ marginBottom: "6px", lineHeight: "1.5" }}
+        >
           {lineParts}
-        </div>
+        </div>,
       );
     }
   });
@@ -116,14 +130,29 @@ const getBotResponse = (input) => {
   return "Gemini says: I’m a local free helper. This site parses code; try asking about uploads, features, or how to use the dashboard.";
 };
 
-export default function ChatBot() {
+export default function ChatBot({
+  embedded = false,
+  onClose = null,
+  onStartChat = null,
+  startOpen = false,
+}) {
   const [messages, setMessages] = useState(initialMessages);
   const [input, setInput] = useState("");
+  const [hasPrompt, setHasPrompt] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [isSendHover, setIsSendHover] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const messagesEndRef = useRef(null);
+
+  useEffect(() => {
+    if (!embedded) return;
+    if (hasPrompt || startOpen) {
+      setIsOpen(true);
+    } else {
+      setIsOpen(false);
+    }
+  }, [embedded, hasPrompt, startOpen]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -142,6 +171,10 @@ export default function ChatBot() {
 
     setMessages((prev) => [...prev, userMessage]);
     setInput("");
+    if (!hasPrompt && onStartChat) {
+      onStartChat();
+    }
+    setHasPrompt(true);
     setIsOpen(true);
     setIsLoading(true);
     setError(null);
@@ -174,7 +207,8 @@ export default function ChatBot() {
 
       setMessages((prev) => [...prev, botMessage]);
     } catch (err) {
-      const errorText = err.message || "Failed to get response from AI assistant";
+      const errorText =
+        err.message || "Failed to get response from AI assistant";
       setError(errorText);
       const errorMessage = {
         id: Date.now() + 1,
@@ -203,90 +237,108 @@ export default function ChatBot() {
     return null;
   };
 
-  return (
-    <>
-      <form style={styles.bottomBar} onSubmit={handleSend}>
-        <div style={styles.bottomInputWrapper}>
-          <img src={aiIcon} alt="AI" style={styles.bottomIcon} />
+  const handleClose = () => {
+    if (onClose) {
+      onClose();
+    }
+    setIsOpen(false);
+    setHasPrompt(false);
+  };
+
+  const renderChatPanel = () => (
+    <div style={embedded ? styles.embeddedPanelContainer : styles.overlay}>
+      <div style={embedded ? styles.embeddedPanel : styles.panel}>
+        <div style={styles.panelHeader}>
+          <span>FlowGen AI Assistant</span>
+          <button
+            style={styles.closeButton}
+            onClick={handleClose}
+            aria-label="Minimize chat"
+          >
+            ✕
+          </button>
+        </div>
+        <div style={styles.messageWindow}>
+          {messages.map((message) => (
+            <div
+              key={message.id}
+              style={
+                message.sender === "user"
+                  ? { ...styles.message, ...styles.userBubble }
+                  : { ...styles.message, ...styles.geminiBubble }
+              }
+            >
+              <span style={styles.sender}>
+                {message.sender === "user" ? "You" : "Gemini"}
+              </span>
+              <div style={styles.text}>
+                {message.sender === "gemini"
+                  ? renderMessageContent(message.text)
+                  : message.text}
+              </div>
+            </div>
+          ))}
+          {handleLoadingMessage()}
+          <div ref={messagesEndRef} />
+        </div>
+        <form style={styles.form} onSubmit={handleSend}>
           <input
-            style={styles.bottomInput}
+            style={styles.input}
             type="text"
             value={input}
             placeholder="Ask about the site..."
             onChange={(e) => setInput(e.target.value)}
             disabled={isLoading}
           />
-        </div>
-        <button
-          type="submit"
-          style={{
-            ...styles.bottomSendButton,
-            ...(isSendHover ? styles.bottomSendButtonHover : {}),
-            ...(isLoading ? styles.bottomSendButtonDisabled : {}),
-          }}
-          onMouseEnter={() => !isLoading && setIsSendHover(true)}
-          onMouseLeave={() => setIsSendHover(false)}
-          disabled={isLoading}
-        >
-          <img src={sendMailIcon} alt="Send" style={styles.sendIcon} />
-        </button>
-      </form>
+          <button
+            type="submit"
+            style={{
+              ...styles.button,
+              ...(isLoading ? styles.buttonDisabled : {}),
+            }}
+            disabled={isLoading}
+          >
+            {isLoading ? "..." : "Send"}
+          </button>
+        </form>
+      </div>
+    </div>
+  );
 
-      {isOpen && (
-        <div style={styles.overlay}>
-          <div style={styles.panel}>
-            <div style={styles.panelHeader}>
-              <span>FlowGen AI Assistant</span>
-              <button
-                style={styles.closeButton}
-                onClick={() => setIsOpen(false)}
-                aria-label="Minimize chat"
-              >
-                —
-              </button>
-            </div>
-            <div style={styles.messageWindow}>
-              {messages.map((message) => (
-                <div
-                  key={message.id}
-                  style={
-                    message.sender === "user"
-                      ? { ...styles.message, ...styles.userBubble }
-                      : { ...styles.message, ...styles.geminiBubble }
-                  }
-                >
-                  <span style={styles.sender}>
-                    {message.sender === "user" ? "You" : "Gemini"}
-                  </span>
-                  <div style={styles.text}>
-                    {message.sender === "gemini"
-                      ? renderMessageContent(message.text)
-                      : message.text}
-                  </div>
-                </div>
-              ))}
-              {handleLoadingMessage()}
-              <div ref={messagesEndRef} />
-            </div>
-            <form style={styles.form} onSubmit={handleSend}>
-              <input
-                style={styles.input}
-                type="text"
-                value={input}
-                placeholder="Ask about the site..."
-                onChange={(e) => setInput(e.target.value)}
-                disabled={isLoading}
-              />
-              <button type="submit" style={{
-                ...styles.button,
-                ...(isLoading ? styles.buttonDisabled : {}),
-              }} disabled={isLoading}>
-                {isLoading ? "..." : "Send"}
-              </button>
-            </form>
+  const showFloatingInput = !isOpen && (!embedded || (embedded && !hasPrompt));
+  const showChatPanel = isOpen && (!embedded || (embedded && hasPrompt));
+
+  return (
+    <>
+      {showFloatingInput && (
+        <form style={styles.bottomBar} onSubmit={handleSend}>
+          <div style={styles.bottomInputWrapper}>
+            <img src={aiIcon} alt="AI" style={styles.bottomIcon} />
+            <input
+              style={styles.bottomInput}
+              type="text"
+              value={input}
+              placeholder="Ask about the site..."
+              onChange={(e) => setInput(e.target.value)}
+              disabled={isLoading}
+            />
           </div>
-        </div>
+          <button
+            type="submit"
+            style={{
+              ...styles.bottomSendButton,
+              ...(isSendHover ? styles.bottomSendButtonHover : {}),
+              ...(isLoading ? styles.bottomSendButtonDisabled : {}),
+            }}
+            onMouseEnter={() => !isLoading && setIsSendHover(true)}
+            onMouseLeave={() => setIsSendHover(false)}
+            disabled={isLoading}
+          >
+            <img src={sendMailIcon} alt="Send" style={styles.sendIcon} />
+          </button>
+        </form>
       )}
+      {showChatPanel && renderChatPanel()}
     </>
   );
 }
@@ -462,6 +514,26 @@ const styles = {
   bottomSendButtonDisabled: {
     opacity: 0.6,
     cursor: "not-allowed",
+  },
+  embeddedPanelContainer: {
+    position: "fixed",
+    inset: 0,
+    backgroundColor: "#0f0f13",
+    zIndex: 9998,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "flex-start",
+    paddingTop: "0",
+  },
+  embeddedPanel: {
+    width: "100%",
+    height: "100vh",
+    background: "#1f1f23",
+    border: "none",
+    borderRadius: "0",
+    display: "flex",
+    flexDirection: "column",
+    overflow: "hidden",
   },
   loadingDot: {
     animation: "pulse 1.4s infinite",

@@ -32,5 +32,6 @@
 .inner_right_container{
     border-radius: 12px;
     overflow: hidden;
+    border: 1px solid #E34D00;
     box-sizing: border-box;
 }
