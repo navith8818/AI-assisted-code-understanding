@@ -30,13 +30,23 @@ def extract_project(zip_path):
     return extract_path
 
 def init_parsers():
+    PY_LANG  = Language(tree_sitter_python.language(),     "python")
+    C_LANG   = Language(tree_sitter_c.language(),          "c")
+    CPP_LANG = Language(tree_sitter_cpp.language(),        "cpp")
+    JS_LANG  = Language(tree_sitter_javascript.language(), "javascript")
+
+    py_parser  = Parser(); py_parser.set_language(PY_LANG)
+    c_parser   = Parser(); c_parser.set_language(C_LANG)
+    cpp_parser = Parser(); cpp_parser.set_language(CPP_LANG)
+    js_parser  = Parser(); js_parser.set_language(JS_LANG)
+
     return {
-        ".py":  Parser(Language(tree_sitter_python.language())),
-        ".c":   Parser(Language(tree_sitter_c.language())),
-        ".h":   Parser(Language(tree_sitter_c.language())),
-        ".cpp": Parser(Language(tree_sitter_cpp.language())),
-        ".hpp": Parser(Language(tree_sitter_cpp.language())),
-        ".js":  Parser(Language(tree_sitter_javascript.language())),
+        ".py":  py_parser,
+        ".c":   c_parser,
+        ".h":   c_parser,
+        ".cpp": cpp_parser,
+        ".hpp": cpp_parser,
+        ".js":  js_parser,
     }
 
 # ─────────────────────────────────────────────
