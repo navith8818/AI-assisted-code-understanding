@@ -5,6 +5,7 @@
     border-radius: 12px;
     padding: 50px;
     box-sizing: border-box;
+    align-self: start;
 }
 .R_inner_right_container h2{
     margin-bottom: 20px;

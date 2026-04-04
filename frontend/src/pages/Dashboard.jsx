@@ -3,6 +3,8 @@ import CytoscapeComponent from "react-cytoscapejs";
 import cytoscape      from "cytoscape";
 import dagre          from "cytoscape-dagre";
 import API from "../api";
+import { explainNode }  from "../api";
+import AISummary        from "../components/AISummary";
 import CodeViewer from "../components/CodeViewer";
 import { fetchFileCode } from "../api";
 import { useNavigate, Link} from "react-router-dom";
@@ -103,6 +105,15 @@ const CY_STYLE = [
 
 cytoscape.use(dagre); 
 
+// Put this OUTSIDE the Dashboard component, above it
+function extractSnippet(fullCode, startLine, maxLines = 60) {
+  if (!fullCode || !startLine) return fullCode || "";
+  const lines = fullCode.split("\n");
+  const start = Math.max(0, startLine - 1);
+  const end   = Math.min(lines.length, start + maxLines);
+  return lines.slice(start, end).join("\n");
+}
+
 export default function Dashboard() {
   const [projects, setProjects]       = useState([]);
   const [analyses, setAnalyses]       = useState([]);
@@ -122,6 +133,9 @@ export default function Dashboard() {
   const [codeFile, setCodeFile]         = useState("");
   const [codeLine, setCodeLine]         = useState(null);
   const [showCode, setShowCode]         = useState(false);
+
+  const [aiSummary,    setAiSummary]    = useState("");
+  const [aiLoading,    setAiLoading]    = useState(false);
   
 
   useEffect(() => { loadProjects(); }, []);
@@ -196,7 +210,7 @@ export default function Dashboard() {
   }
 };
 
-  const loadAnalysis = async (projectId) => {
+const loadAnalysis = async (projectId) => {
     try {
       const res = await API.get(`/projects/${projectId}/analyses`);
       if (res.data.length > 0) {
@@ -211,12 +225,14 @@ export default function Dashboard() {
   };
 
   // When a node is clicked — highlight its neighborhood
-  const handleNodeClick = async (nodeId) => {
+const handleNodeClick = async (nodeId) => {
   setSelected(nodeId);
   setSideTab("node");
   setNote("");
+  setAiSummary("");    // clear previous summary
+  setAiLoading(false);
 
-  // Load annotations for this node
+  // ── Load annotations ──────────────────────────────────────
   if (activeAnalysis) {
     try {
       const res = await API.get(`/analyses/${activeAnalysis.id}/annotations`);
@@ -226,7 +242,7 @@ export default function Dashboard() {
     } catch {}
   }
 
-  // Highlight neighborhood in graph
+  // ── Highlight neighborhood (keep your existing logic) ─────
   const cy = cyRef.current;
   if (cy) {
     cy.elements().removeClass("highlighted faded");
@@ -236,19 +252,63 @@ export default function Dashboard() {
     cy.elements().not(neighborhood).addClass("faded");
   }
 
-  // ── Fetch source file for this node ──────────────────────
+  // ── Fetch source file ─────────────────────────────────────
   if (!activeAnalysis) return;
-  const nodeEl = elements.find(e => e.data.id === nodeId);
-  const file   = nodeEl?.data?.file;
-  const line   = nodeEl?.data?.line;
+  const nodeEl  = elements.find(e => e.data.id === nodeId);
+  const file    = nodeEl?.data?.file;
+  const line    = nodeEl?.data?.line;
+  const type    = nodeEl?.data?.type || "function";
 
   if (file) {
     try {
       const { fetchFileCode } = await import("../api");
-      const code = await fetchFileCode(activeAnalysis.id, file);
-      setCodeContent(code);
+      const fullCode = await fetchFileCode(activeAnalysis.id, file);
+      setCodeContent(fullCode);
       setCodeFile(file);
       setCodeLine(line || null);
+
+      // ── Extract snippet around the function ───────────────
+      const snippet = extractSnippet(fullCode, line);
+
+      // ── Call Gemini for AI summary ────────────────────────
+      setAiLoading(true);
+      try {
+        const { explainNode } = await import("../api");
+
+        // Check cache first — don't call if already explained
+        const cacheKey = `${activeAnalysis.id}:${nodeId}`;
+        const cached   = sessionStorage.getItem(cacheKey);
+
+        if (cached) {
+          setAiSummary(cached);
+          setAiLoading(false);
+        } else {
+          const summary = await explainNode(
+            activeAnalysis.id, nodeId, snippet, type
+          );
+          setAiSummary(summary);
+          // Save to session cache so clicking same node again is instant
+          sessionStorage.setItem(cacheKey, summary);
+          setAiLoading(false);
+        }
+
+      } catch (err) {
+        const status = err.response?.status;
+        const detail = err.response?.data?.detail;
+
+        if (status === 429) {
+          setAiSummary(
+            "⏳ **Rate limit reached**\n\n" +
+            (detail || "Please wait a moment before clicking another node.")
+          );
+        } else if (status === 403) {
+          setAiSummary("🔑 **API key error**\n\nCheck your GEMINI_API_KEY in the .env file.");
+        } else {
+          setAiSummary("❌ **Could not generate summary**\n\nPlease try again later.");
+        }
+        setAiLoading(false);
+      }
+
     } catch (err) {
       console.error("Could not load file:", err);
       setCodeContent("// Could not load file: " + file);
@@ -422,50 +482,62 @@ export default function Dashboard() {
 
         {/* ── Node inspector tab ── */}
         {sideTab === "node" && (
-          <div style={ui.tabContent}>
-            {!selectedNode
-              ? <p style={ui.muted}>Click any node in the graph to inspect it.</p>
-              : (
-                <>
-                  <div style={ui.nodeCard}>
-                    <div style={{
-                      ...ui.nodeTypeBadge,
-                      background: TYPE_COLOR[
-                        elements.find(e=>e.data.id===selectedNode)?.data?.type
-                      ] || "#5a5a7a",
-                    }}>
-                      {elements.find(e=>e.data.id===selectedNode)?.data?.type?.toUpperCase()}
-                    </div>
-                    <div style={ui.nodeName}>{selectedNode}</div>
-                    {(() => {
-                      const el = elements.find(e=>e.data.id===selectedNode);
-                      return el?.data?.file
-                        ? <div style={ui.nodeMeta}>
-                            📄 {el.data.file}
-                            {el.data.line ? ` : ${el.data.line}` : ""}
-                          </div>
-                        : null;
-                    })()}
+        <div style={ui.tabContent}>
+          {!selectedNode
+            ? <p style={ui.muted}>Click any node in the graph to inspect it.</p>
+            : (
+              <>
+                {/* Node info card */}
+                <div style={ui.nodeCard}>
+                  <div style={{
+                    ...ui.nodeTypeBadge,
+                    background: TYPE_COLOR[
+                      elements.find(e => e.data.id === selectedNode)?.data?.type
+                    ] || "#5a5a7a",
+                  }}>
+                    {elements.find(e=>e.data.id===selectedNode)
+                            ?.data?.type?.toUpperCase()}
                   </div>
+                  <div style={ui.nodeName}>{selectedNode}</div>
+                  {(() => {
+                    const el = elements.find(e => e.data.id === selectedNode);
+                    return el?.data?.file
+                      ? <div style={ui.nodeMeta}>
+                          📄 {el.data.file}
+                          {el.data.line ? ` : line ${el.data.line}` : ""}
+                        </div>
+                      : null;
+                  })()}
+                </div>
 
-                  <label style={ui.label}>ANNOTATION</label>
-                  <textarea
-                    style={ui.textarea}
-                    value={note}
-                    onChange={e => setNote(e.target.value)}
-                    placeholder="Add notes about this node…"
-                  />
-                  <button style={ui.saveBtn} onClick={saveNote}>
-                    Save Note
-                  </button>
-                  <button style={ui.clearBtn} onClick={clearHighlight}>
-                    Clear Selection
-                  </button>
-                </>
-              )
-            }
-          </div>
-        )}
+                {/* ── AI Summary ── */}
+                <AISummary
+                  summary={aiSummary}
+                  loading={aiLoading}
+                  nodeId={selectedNode}
+                />
+
+                {/* Annotation */}
+                <label style={{...ui.label, marginTop:"1rem"}}>
+                  YOUR NOTES
+                </label>
+                <textarea
+                  style={ui.textarea}
+                  value={note}
+                  onChange={e => setNote(e.target.value)}
+                  placeholder="Add your own notes…"
+                />
+                <button style={ui.saveBtn} onClick={saveNote}>
+                  Save Note
+                </button>
+                <button style={ui.clearBtn} onClick={clearHighlight}>
+                  Clear Selection
+                </button>
+              </>
+            )
+          }
+        </div>
+      )}
 
         {/* Logout */}
         <button style={ui.logoutBtn} onClick={logout}>Sign Out</button>

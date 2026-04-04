@@ -21,6 +21,36 @@
   }
 }
 
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+
+/* 1. The width of the entire scrollbar */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+/* 2. The background of the scrollbar */
+::-webkit-scrollbar-track {
+  background: #4948485b; 
+  border-radius: 10px;
+}
+
+/* 3. The draggable handle */
+::-webkit-scrollbar-thumb {
+  background: #4242424b;
+  border-radius: 0px;
+  border: 3px solid #88888856; /* Creates padding around the thumb */
+}
+
+/* 4. Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555; 
+}
+
+
 
 body {
   margin: 0;

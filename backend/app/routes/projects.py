@@ -2,6 +2,7 @@ from fastapi import APIRouter, UploadFile, File, Depends, HTTPException
 from fastapi.responses import PlainTextResponse
 from app.auth import get_current_user
 from app.models import AnalysisOut, ProjectOut, AnnotationCreate, AnnotationOut
+import google.genai as genai
 from app import crud
 import sys, os
 
@@ -139,3 +140,53 @@ async def delete_project(
 
     await crud.delete_project(project_id)
     return {"deleted": project_id}
+
+@router.post("/analyses/{analysis_id}/explain")
+async def explain_node(
+    analysis_id: str,
+    body: dict,
+    current_user: dict = Depends(get_current_user),
+):
+    """
+    Takes a node_id + its source code snippet,
+    sends it to Gemini, returns a plain-English summary.
+    """
+    node_id   = body.get("node_id", "")
+    code      = body.get("code", "")
+    node_type = body.get("node_type", "function")
+
+    if not code:
+        raise HTTPException(status_code=400, detail="No code provided")
+
+    api_key = os.getenv("GEMINI_API_KEY")
+    if not api_key:
+        raise HTTPException(status_code=500, detail="Gemini API key not configured")
+
+    try:
+        client = genai.Client(api_key=api_key)
+
+        prompt = f"""You are a code analysis assistant. Analyze this {node_type} and explain it clearly.
+
+Function/Method name: {node_id}
+
+Source code:
+    Provide a concise summary with these sections:
+    1. **What it does** — one sentence overview
+    2. **Inputs** — what parameters/data it takes (if any)
+    3. **Process** — what steps happen inside it
+    4. **Output/Effect** — what it returns or what side effect it has
+    5. **Calls** — what other functions it calls (if any)
+
+    Keep it short, clear, and developer-friendly. No fluff."""
+
+        response = client.models.generate_content(
+            model="gemini-2.5-flash",
+            contents=prompt,
+        )
+
+        summary = response.text if hasattr(response, "text") else str(response)
+        return {"summary": summary, "node_id": node_id}
+
+    except Exception as e:
+        print(f"Gemini explain error: {e}")
+        raise HTTPException(status_code=500, detail=f"Gemini error: {str(e)}")

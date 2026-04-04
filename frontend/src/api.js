@@ -16,4 +16,13 @@ export const fetchFileCode = async (analysisId, filepath) => {
   return res.data;   // plain text
 };
 
+export const explainNode = async (analysisId, nodeId, code, nodeType) => {
+  const res = await API.post(`/analyses/${analysisId}/explain`, {
+    node_id:   nodeId,
+    code:      code,
+    node_type: nodeType,
+  });
+  return res.data.summary;
+};
+
 export default API;
