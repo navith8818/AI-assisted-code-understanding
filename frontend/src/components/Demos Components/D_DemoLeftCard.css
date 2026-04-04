@@ -10,6 +10,7 @@
 }
 .inner_left_container{
     width: 60%;
+    min-width: 400px;
     height: 100%;
     background-color: #1C1C1E;
     border-radius: 12px;
@@ -29,9 +30,17 @@
     font-family: 'Sora', sans-serif;
     margin: 30px 0 40px 0;
 }
-.inner_right_container{
+.DL_inner_right_container{
     border-radius: 12px;
+    min-width: 400px;
     overflow: hidden;
     border: 1px solid #E34D00;
     box-sizing: border-box;
+}
+@media (max-width: 1200px) {
+  .home_hero_main_left h1 {
+    font-size: 60px;
+    line-height: 90px;
+  
+  }
 }

@@ -1,12 +1,14 @@
 .box_main {
   width:            630px;
   background-color: #121214;
-  position:         relative;
-  top:              -300px;
+  position:         absolute;
+  bottom:              0px;
+  right: 0;
   padding:          30px;
   box-sizing:       border-box;
   border:           2px solid #E34D00;
   animation: slideDown 0.8s ease-out forwards;
+  margin-right: 100px;
 }
 
 /* ── Text ──────────────────────────────────────────────── */
@@ -97,4 +99,14 @@
   align-items: center;
   padding-top: 16px;
   box-sizing:  border-box;
+}
+@media (max-width: 1500px) {
+  .box_main {
+    width:            430px;
+  
+  }
+  .box_main .text_box p {
+    width:       100%;
+    font-size:   12px;
+ }
 }

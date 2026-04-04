@@ -11,7 +11,7 @@ export default function DemoLeftCard({span, heading, paragraph, myVideo}){
                 <Button text={"Try out"} />
                 </ Link>
             </div>
-            <div className="inner_right_container">
+            <div className="DL_inner_right_container">
                 <video width="100%" height="100%" autoPlay muted loop>
                     <source src={myVideo} type="video/mp4" />
                     Your browser does not support the video tag.
