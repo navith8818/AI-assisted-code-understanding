@@ -7,6 +7,7 @@ export default function Hero(){
             
                 
                 <UploadBox/>
+                
             
         </div>
     );
