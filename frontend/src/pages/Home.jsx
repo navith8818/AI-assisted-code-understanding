@@ -9,10 +9,9 @@ export default function Home() {
     <main style={styles.container}>
       <HeaderNotLogged />
       <Hero />
-      <Description />
-      <Explanation />
+      
       <ChatBot />
-      <Footer />
+      
     </main>
   );
 }
