@@ -73,6 +73,7 @@ export default function App() {
   const isDone = status === 'done' && result;
 
   return (
+<<<<<<< HEAD
     <div className="app">
       <Sidebar
         onNewChat={reset}
@@ -154,5 +155,21 @@ export default function App() {
         )}
       </main>
     </div>
+=======
+    <BrowserRouter>
+      <Routes>
+        <Route path="/Home"     element={<Home />} />
+        <Route path="/Features"     element={<Features />} />
+        <Route path="/Demos"     element={<Demos />} />
+        <Route path="/Help"  element={<Help />} />
+        <Route path="/login"     element={<Login />} />
+        <Route path="/register"  element={<Register />} />
+        <Route path="/dashboard" element={
+          <PrivateRoute><Dashboard /></PrivateRoute>
+        } />
+        <Route path="*" element={<Navigate to="/dashboard" />} />
+      </Routes>
+    </BrowserRouter>
+>>>>>>> 3588a6188676b383697558ed91d1c26bbf4dc701
   );
 }
