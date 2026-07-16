@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inference at the Edge — AI Cloud Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ===== ANNOUNCEMENT BAR ===== -->
+<div class="announce-bar">
+  <div class="announce-bar__inner">
+    <span class="announce-bar__dot"></span>
+    <span>GPU AI/ML Apps today! NVIDIA A100s &amp; H100s from $1.10/h</span>
+    <a href="#pricing" class="announce-bar__link">Get started <span aria-hidden="true">→</span></a>
+  </div>
+</div>
+
+<!-- ===== HEADER / NAV ===== -->
+<header class="site-header" id="siteHeader">
+  <div class="site-header__inner">
+    <a href="#top" class="brand">
+      <span class="brand__mark" aria-hidden="true">
+        <svg viewBox="0 0 32 32" width="22" height="22"><path d="M16 2 L29 9 V23 L16 30 L3 23 V9 Z" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="16" cy="16" r="4.5" fill="currentColor"/></svg>
+      </span>
+      <span class="brand__name">NOVACORE</span>
+    </a>
+
+    <nav class="main-nav" aria-label="Main">
+      <div class="nav-item">
+        <button class="nav-link">Products <svg class="chev" width="10" height="6" viewBox="0 0 10 6"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button>
+        <div class="nav-dropdown">
+          <a href="#" class="nav-dropdown__item"><span class="nav-dropdown__icon">⚡</span><span><strong>AI GPU Infrastructure</strong><small>Bare metal &amp; virtual GPUs for training</small></span></a>
+          <a href="#" class="nav-dropdown__item"><span class="nav-dropdown__icon">🧠</span><span><strong>Inference at the Edge</strong><small>Low-latency inference, 160+ locations</small></span></a>
+          <a href="#" class="nav-dropdown__item"><span class="nav-dropdown__icon">☁️</span><span><strong>Cloud &amp; Storage</strong><small>Object storage and managed cloud</small></span></a>
+          <a href="#" class="nav-dropdown__item"><span class="nav-dropdown__icon">🛡️</span><span><strong>DDoS Protection</strong><small>Network &amp; application layer security</small></span></a>
+        </div>
+      </div>
+      <a href="#pricing" class="nav-link nav-link--plain">Pricing</a>
+      <div class="nav-item">
+        <button class="nav-link">Resources <svg class="chev" width="10" height="6" viewBox="0 0 10 6"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button>
+        <div class="nav-dropdown">
+          <a href="#" class="nav-dropdown__item"><span class="nav-dropdown__icon">📄</span><span><strong>Documentation</strong><small>Guides and API reference</small></span></a>
+          <a href="#" class="nav-dropdown__item"><span class="nav-dropdown__icon">✍️</span><span><strong>Blog</strong><small>Product news and engineering posts</small></span></a>
+          <a href="#" class="nav-dropdown__item"><span class="nav-dropdown__icon">📊</span><span><strong>Case studies</strong><small>How teams ship with us</small></span></a>
+        </div>
+      </div>
+      <a href="#" class="nav-link nav-link--plain">Partners</a>
+      <a href="#faq" class="nav-link nav-link--plain">Why Us</a>
+    </nav>
+
+    <div class="header-actions">
+      <a href="#" class="header-actions__ghost header-actions__ghost--hide-sm">Under attack?</a>
+      <a href="#" class="header-actions__ghost">Log in</a>
+      <button class="lang-switch" aria-label="Language">🌐 EN</button>
+      <a href="#" class="header-actions__contact header-actions__ghost--hide-sm">Contact us</a>
+      <a href="#pricing" class="btn btn--primary btn--sm">Sign up for free</a>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- ===== HERO ===== -->
+  <section class="hero">
+    <div class="hero__bg" aria-hidden="true">
+      <div class="circuit-grid"></div>
+      <div class="hero__glow hero__glow--1"></div>
+      <div class="hero__glow hero__glow--2"></div>
+    </div>
+
+    <div class="hero__inner">
+      <span class="pill pill--beta"><span class="pill__dot"></span> Beta release</span>
+      <h1 class="hero__title">Inference at the Edge</h1>
+      <p class="hero__subtitle">Boost your AI application's speed and efficiency globally by bringing inference closer to your users. Enjoy customization and cost-efficiency for a best-in-class inference experience.</p>
+      <div class="hero__cta">
+        <a href="#pricing" class="btn btn--primary">Get started</a>
+        <a href="#demo" class="btn btn--ghost">Book a demo</a>
+      </div>
+
+      <div class="hero__diagram" id="heroDiagram">
+        <svg class="hero__lines" viewBox="0 0 900 420" preserveAspectRatio="none" aria-hidden="true">
+          <path class="hero-line" d="M450,210 C320,210 280,120 150,95" />
+          <path class="hero-line" d="M450,210 C320,210 280,300 150,330" />
+          <path class="hero-line" d="M450,210 C580,210 620,120 750,95" />
+          <path class="hero-line" d="M450,210 C580,210 620,300 750,330" />
+          <path class="hero-line" d="M450,210 L450,330" />
+          <path class="hero-line" d="M450,210 L450,90" />
+        </svg>
+
+        <div class="node node--chip">
+          <span class="node__label">AI</span>
+        </div>
+
+        <div class="node node--leaf" style="--xp:16.6%; --yp:22.6%;">▲</div>
+        <div class="node node--leaf" style="--xp:16.6%; --yp:78.5%;">S.</div>
+        <div class="node node--leaf" style="--xp:83.3%; --yp:22.6%;">⊞</div>
+        <div class="node node--leaf" style="--xp:83.3%; --yp:78.5%;">◎</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== TRY IT (light section) ===== -->
+  <section class="section section--light" id="try">
+    <div class="section__inner section__inner--split">
+      <div class="try-visual">
+        <div class="try-visual__glow" aria-hidden="true"></div>
+        <span class="try-visual__tag">Try Novacore Inference</span>
+      </div>
+      <div class="try-copy">
+        <h2 class="h2">Use AI faster and more efficiently right on your device</h2>
+        <p class="lead">Novacore Inference at the Edge reduces the latency of your ML model output and improves the performance of AI-enabled applications.</p>
+        <p class="muted">It's particularly useful for AI apps that need immediate processing — voice assistants, real-time recommendations, and computer vision at the point of capture.</p>
+
+        <ul class="capability-list">
+          <li><span class="capability-list__icon">📝</span> Text generation</li>
+          <li><span class="capability-list__icon">🎙️</span> Speech recognition</li>
+          <li><span class="capability-list__icon">🖼️</span> Image processing</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== UNLEASH POTENTIAL (dark, two-up) ===== -->
+  <section class="section section--dark">
+    <div class="section__inner">
+      <header class="section__head">
+        <h2 class="h2 h2--invert">Unleash your AI application's full potential</h2>
+      </header>
+
+      <div class="feature-grid">
+        <article class="feature-card feature-card--globe-mini">
+          <div class="feature-card__visual">
+            <div class="mini-globe" aria-hidden="true">
+              <div class="mini-globe__sphere"></div>
+            </div>
+          </div>
+          <h3>Low-latency global network</h3>
+          <p>Minimize model response time with our 160+ location CDN, providing an average global latency of 30&nbsp;ms.</p>
+        </article>
+
+        <article class="feature-card feature-card--network">
+          <div class="feature-card__visual">
+            <div class="endpoint-diagram" aria-hidden="true">
+              <div class="endpoint-diagram__hub">AI</div>
+              <span class="endpoint-diagram__node" style="top:8%; left:14%;">▲</span>
+              <span class="endpoint-diagram__node" style="top:10%; left:78%;">◎</span>
+              <span class="endpoint-diagram__node" style="top:78%; left:18%;">⊞</span>
+              <span class="endpoint-diagram__node" style="top:80%; left:74%;">S.</span>
+            </div>
+          </div>
+          <h3>Single endpoint for all AI tasks</h3>
+          <p>Novacore offers automated infrastructure management for AI applications while providing real-time inference.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== GLOBAL NETWORK (dark, big globe) ===== -->
+  <section class="section section--dark section--globe">
+    <div class="section__inner section__inner--center">
+      <span class="pill pill--outline">⊕ Global Network</span>
+      <h2 class="h2 h2--invert">A truly global network<br>for lightning-fast inference</h2>
+      <p class="lead lead--invert">Novacore's global network consists of more than 160 locations, allowing you to reach your users anywhere in the world.</p>
+    </div>
+    <div class="globe-wrap" id="globeWrap" aria-hidden="true">
+      <div class="globe-wrap__glow"></div>
+      <canvas id="globeCanvas"></canvas>
+    </div>
+  </section>
+
+  <!-- ===== EXPERIENCE IT NOW (light, playground) ===== -->
+  <section class="section section--light" id="demo">
+    <div class="section__inner section__inner--center">
+      <span class="rule-deco" aria-hidden="true">›››</span>
+      <h2 class="h2">Experience it now</h2>
+      <p class="lead">Try Novacore Inference at the Edge for yourself using our playground.</p>
+
+      <div class="logo-row" aria-hidden="true">
+        <span class="logo-chip">S.</span>
+        <span class="logo-chip">◎</span>
+        <span class="logo-chip">M</span>
+        <span class="logo-chip">⊞</span>
+        <span class="logo-chip">A</span>
+        <span class="logo-chip">◑</span>
+        <span class="logo-chip">▣</span>
+      </div>
+
+      <div class="playground-card">
+        <div class="playground-card__icon">⚡</div>
+        <h3>Discover the AI Realm</h3>
+        <p class="muted">Generate text, transcribe audio, or analyze an image — right in your browser.</p>
+        <div class="playground" id="playground">
+          <div class="playground__tabs">
+            <button class="playground__tab is-active" data-tab="text">Text</button>
+            <button class="playground__tab" data-tab="speech">Speech</button>
+            <button class="playground__tab" data-tab="image">Image</button>
+          </div>
+          <textarea class="playground__input" id="playgroundInput" placeholder="Type a prompt, e.g. &quot;Write a haiku about edge computing&quot;"></textarea>
+          <div class="playground__row">
+            <button class="btn btn--primary btn--sm" id="playgroundRun">Run inference</button>
+            <span class="playground__latency" id="playgroundLatency"></span>
+          </div>
+          <pre class="playground__output" id="playgroundOutput">// output will appear here</pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== USE CASES (light) ===== -->
+  <section class="section section--light">
+    <div class="section__inner section__inner--center">
+      <span class="pill pill--outline">◷ Model Serving, Your Way</span>
+      <h2 class="h2">A flexible solution<br>for diverse use cases</h2>
+    </div>
+
+    <div class="usecase-grid">
+      <article class="usecase-card">
+        <div class="usecase-card__visual usecase-card__visual--tech" aria-hidden="true">⚙️</div>
+        <h3>IT / Technology</h3>
+        <ul>
+          <li>Generative AI applications</li>
+          <li>Chatbots and virtual assistants</li>
+          <li>AI tools for software engineers</li>
+          <li>Data augmentation</li>
+        </ul>
+      </article>
+
+      <article class="usecase-card">
+        <div class="usecase-card__visual usecase-card__visual--retail" aria-hidden="true">
+          <span>VISA</span><span>●●</span><span>PP</span>
+        </div>
+        <h3>Retail</h3>
+        <ul>
+          <li>Smart grocery with self-checkout and merchandising</li>
+          <li>Real-time user behavior analysis and active feedback: content generation, predictions, recommendations</li>
+        </ul>
+      </article>
+
+      <article class="usecase-card">
+        <div class="usecase-card__visual usecase-card__visual--auto" aria-hidden="true">📍📍📍</div>
+        <h3>Automotive</h3>
+        <ul>
+          <li>Fast response to changes in road conditions and incidents in self-driving vehicles</li>
+          <li>Advanced driver assistants</li>
+          <li>Vehicle personalization</li>
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===== PRICING (dark) ===== -->
+  <section class="section section--dark" id="pricing">
+    <div class="section__inner section__inner--center">
+      <span class="pill pill--outline" id="currencyToggle">€ / $</span>
+      <h2 class="h2 h2--invert">Use dedicated GPUs to scale custom<br>models and <em>production apps</em></h2>
+    </div>
+
+    <div class="pricing-grid">
+      <article class="price-card">
+        <h4 class="price-card__name">1× NVIDIA L40S GPU</h4>
+        <div class="price-card__amount"><span class="price-card__currency">$</span>2.60<span class="price-card__period">/month</span></div>
+        <ul class="price-card__specs">
+          <li>16 vCPU memory</li>
+          <li>48GB GPU memory</li>
+          <li>232GB RAM</li>
+          <li>4B–21B parameters <span class="info-dot">i</span></li>
+        </ul>
+        <a href="#" class="btn btn--outline btn--block">Order now</a>
+      </article>
+
+      <article class="price-card price-card--featured">
+        <span class="price-card__badge">Most popular</span>
+        <h4 class="price-card__name">2× NVIDIA L40S GPU</h4>
+        <div class="price-card__amount"><span class="price-card__currency">$</span>10.10<span class="price-card__period">/month</span></div>
+        <ul class="price-card__specs">
+          <li>96GB GPU memory</li>
+          <li>32 vCPU</li>
+          <li>464GB RAM</li>
+          <li>21B–41B parameters <span class="info-dot">i</span></li>
+        </ul>
+        <a href="#" class="btn btn--primary btn--block">Order now</a>
+      </article>
+
+      <article class="price-card">
+        <h4 class="price-card__name">2× NVIDIA L40S GPU</h4>
+        <div class="price-card__amount"><span class="price-card__currency">$</span>5.10<span class="price-card__period">/month</span></div>
+        <ul class="price-card__specs">
+          <li>192GB GPU memory</li>
+          <li>64 vCPU</li>
+          <li>928GB RAM</li>
+          <li>41B–81B parameters <span class="info-dot">i</span></li>
+        </ul>
+        <a href="#" class="btn btn--outline btn--block">Order now</a>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===== OTHER PRODUCTS (dark cards) ===== -->
+  <section class="section section--dark">
+    <div class="section__inner">
+      <h2 class="h2 h2--invert">Try other Novacore products</h2>
+      <div class="product-grid">
+        <a href="#" class="product-card">
+          <div class="product-card__icon">⚡</div>
+          <h3>AI GPU Infrastructure</h3>
+          <p>Virtual machines and bare metal servers with A100 &amp; H100 NVIDIA GPUs for LLM training and high-performance computing.</p>
+        </a>
+        <a href="#" class="product-card">
+          <div class="product-card__icon">🧩</div>
+          <h3>AI IPU Infrastructure</h3>
+          <p>Specialized infrastructure for parallel processing workloads, optimized for graph and intelligence processing.</p>
+        </a>
+        <a href="#" class="product-card">
+          <div class="product-card__icon">🛰️</div>
+          <h3>Edge Cloud</h3>
+          <p>Deploy containers and functions across 160+ points of presence for the lowest possible latency.</p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FAQ ===== -->
+  <section class="section section--dark" id="faq">
+    <div class="section__inner section__inner--narrow">
+      <h2 class="h2 h2--invert section__head--center">Frequently asked questions</h2>
+
+      <div class="accordion" id="accordion">
+        <div class="accordion__item is-open">
+          <button class="accordion__trigger">
+            <span>What is Inference at the Edge?</span>
+            <span class="accordion__icon">⌄</span>
+          </button>
+          <div class="accordion__panel">
+            <p>It's a service that runs your trained model on points of presence close to your users, instead of a single central region, cutting round-trip latency dramatically.</p>
+          </div>
+        </div>
+        <div class="accordion__item">
+          <button class="accordion__trigger">
+            <span>Is Novacore Inference at the Edge suitable for AIoT systems?</span>
+            <span class="accordion__icon">⌄</span>
+          </button>
+          <div class="accordion__panel">
+            <p>Yes. The platform is built to handle bursty, latency-sensitive traffic from connected devices, with autoscaling endpoints near the data source.</p>
+          </div>
+        </div>
+        <div class="accordion__item">
+          <button class="accordion__trigger">
+            <span>Why is the NVIDIA L40S GPU good for AI inference?</span>
+            <span class="accordion__icon">⌄</span>
+          </button>
+          <div class="accordion__panel">
+            <p>The L40S balances strong FP8/INT8 throughput with large memory bandwidth, making it cost-efficient for serving mid-size generative models in production.</p>
+          </div>
+        </div>
+        <div class="accordion__item">
+          <button class="accordion__trigger">
+            <span>Can I bring my own custom model?</span>
+            <span class="accordion__icon">⌄</span>
+          </button>
+          <div class="accordion__panel">
+            <p>Yes — upload your own weights or container image and we'll handle routing, scaling, and health checks across the edge network.</p>
+          </div>
+        </div>
+        <div class="accordion__item">
+          <button class="accordion__trigger">
+            <span>How is billing calculated?</span>
+            <span class="accordion__icon">⌄</span>
+          </button>
+          <div class="accordion__panel">
+            <p>You pay per GPU-hour at the rate shown for your chosen instance type, billed by the minute, with no long-term commitment required.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cta-banner">
+      <div class="cta-banner__glow" aria-hidden="true"></div>
+      <h3>Contact us to discuss your project</h3>
+      <a href="#" class="btn btn--primary">Talk to sales</a>
+    </div>
+  </section>
+
+</main>
+
+<!-- ===== FOOTER ===== -->
+<footer class="site-footer">
+  <div class="site-footer__inner">
+    <div class="site-footer__top">
+      <div class="site-footer__brand">
+        <a href="#top" class="brand brand--footer">
+          <span class="brand__mark" aria-hidden="true">
+            <svg viewBox="0 0 32 32" width="20" height="20"><path d="M16 2 L29 9 V23 L16 30 L3 23 V9 Z" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="16" cy="16" r="4.5" fill="currentColor"/></svg>
+          </span>
+          <span class="brand__name">NOVACORE</span>
+        </a>
+        <p class="site-footer__tagline">Powerful solutions to help your business grow globally. Experience superior performance, proven by the largest online businesses.</p>
+        <div class="site-footer__social" aria-label="Social links">
+          <a href="#" aria-label="LinkedIn">in</a>
+          <a href="#" aria-label="X">𝕏</a>
+          <a href="#" aria-label="Instagram">◎</a>
+          <a href="#" aria-label="YouTube">▶</a>
+          <a href="#" aria-label="TikTok">♪</a>
+        </div>
+      </div>
+
+      <nav class="site-footer__col">
+        <h5>Products</h5>
+        <a href="#">CDN</a>
+        <a href="#">Hosting</a>
+        <a href="#">Streaming Platform</a>
+        <a href="#">Storage</a>
+        <a href="#">DDoS Protection</a>
+        <a href="#">Software Development</a>
+        <a href="#">Cloud</a>
+        <a href="#">IT Infrastructure Management</a>
+      </nav>
+
+      <nav class="site-footer__col">
+        <h5>Company</h5>
+        <a href="#">About</a>
+        <a href="#">Customers</a>
+        <a href="#">Case studies</a>
+        <a href="#">Careers</a>
+        <a href="#">Blog</a>
+        <a href="#">Press</a>
+        <a href="#">Legal information</a>
+        <a href="#">Site map</a>
+      </nav>
+
+      <nav class="site-footer__col">
+        <h5>Resources</h5>
+        <a href="#">Status page</a>
+        <a href="#">API documentation</a>
+        <a href="#">Internet peering points</a>
+        <a href="#">Product documentation</a>
+        <a href="#">Looking glass</a>
+        <a href="#">Developer tools</a>
+      </nav>
+
+      <div class="site-footer__col">
+        <h5>Contact</h5>
+        <p>+1 415 555 0142</p>
+        <p>sales@novacore.example</p>
+        <p>support@novacore.example</p>
+      </div>
+    </div>
+
+    <div class="site-footer__newsletter">
+      <p>Subscribe to discover the latest updates, news, and features.</p>
+      <form class="newsletter-form" id="newsletterForm">
+        <input type="email" placeholder="Enter your e-mail" required aria-label="Email address">
+        <button type="submit" aria-label="Subscribe">→</button>
+      </form>
+    </div>
+
+    <div class="site-footer__bottom">
+      <p>This site is protected by reCAPTCHA. Google's Privacy Policy and Terms of Service apply.</p>
+      <p>© 2015–2026 Novacore Labs. All rights reserved. Principal place of business address: 100 Edge Way, Suite 4, San Francisco, CA.</p>
+    </div>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>

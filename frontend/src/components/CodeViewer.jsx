@@ -1,153 +1,140 @@
-import Editor        from "@monaco-editor/react";
-import { useRef, useEffect } from "react";
+import { useEffect, useRef } from 'react';
+
+// ── Syntax token highlighter (no deps) ──────────────────────
+const KEYWORDS = /\b(function|class|return|const|let|var|if|else|for|while|do|switch|case|break|continue|new|delete|typeof|instanceof|import|export|default|from|async|await|try|catch|finally|throw|yield|extends|super|this|null|undefined|true|false|def|in|is|not|and|or|pass|with|as|lambda|global|nonlocal|raise|elif|int|float|double|void|bool|char|string|static|public|private|protected|virtual|override|struct|enum|namespace|using|include|#include|#define|printf|cout|cin|endl|std)\b/g;
+
+function tokenize(line) {
+  // Very simple tokenizer for visual effect
+  const result = [];
+  let i = 0;
+  const str = line;
+
+  while (i < str.length) {
+    // String literals
+    if (str[i] === '"' || str[i] === "'" || str[i] === '`') {
+      const q = str[i];
+      let j = i + 1;
+      while (j < str.length && str[j] !== q) {
+        if (str[j] === '\\') j++;
+        j++;
+      }
+      result.push({ type: 'string', text: str.slice(i, j + 1) });
+      i = j + 1;
+      continue;
+    }
+    // Comments
+    if (str[i] === '/' && str[i + 1] === '/') {
+      result.push({ type: 'comment', text: str.slice(i) });
+      break;
+    }
+    if (str[i] === '#') {
+      result.push({ type: 'comment', text: str.slice(i) });
+      break;
+    }
+    // Numbers
+    if (/\d/.test(str[i])) {
+      let j = i;
+      while (j < str.length && /[\d.]/.test(str[j])) j++;
+      result.push({ type: 'number', text: str.slice(i, j) });
+      i = j;
+      continue;
+    }
+    // Word
+    if (/[a-zA-Z_$]/.test(str[i])) {
+      let j = i;
+      while (j < str.length && /[\w$]/.test(str[j])) j++;
+      const word = str.slice(i, j);
+      const isKeyword = KEYWORDS.test(word);
+      KEYWORDS.lastIndex = 0;
+      result.push({ type: isKeyword ? 'keyword' : 'ident', text: word });
+      i = j;
+      continue;
+    }
+    // Punctuation / operator
+    result.push({ type: 'punct', text: str[i] });
+    i++;
+  }
+  return result;
+}
+
+const TOKEN_COLOR = {
+  keyword: '#c792ea',
+  string:  '#c3e88d',
+  number:  '#f78c6c',
+  comment: '#546e7a',
+  ident:   '#82aaff',
+  punct:   'rgba(255,255,255,0.6)',
+};
+
+function CodeLine({ lineNumber, content, isHighlighted }) {
+  const tokens = tokenize(content);
+  return (
+    <div className={`code-line${isHighlighted ? ' highlighted' : ''}`}>
+      <span className="code-line-num">{lineNumber}</span>
+      <span className="code-line-content">
+        {tokens.map((t, i) => (
+          <span key={i} style={{ color: TOKEN_COLOR[t.type] || 'inherit' }}>{t.text}</span>
+        ))}
+      </span>
+    </div>
+  );
+}
 
 export default function CodeViewer({ code, filename, targetLine }) {
-  const editorRef = useRef(null);
-  const monacoRef = useRef(null);
+  const scrollRef = useRef(null);
 
-  const handleMount = (editor, monaco) => {
-    editorRef.current = editor;
-    monacoRef.current = monaco;
-    if (targetLine) scrollToLine(editor, monaco, targetLine);
-  };
-
-  // Re-scroll whenever the target line changes
   useEffect(() => {
-    if (editorRef.current && monacoRef.current && targetLine) {
-      scrollToLine(editorRef.current, monacoRef.current, targetLine);
+    if (targetLine && scrollRef.current) {
+      const lineEl = scrollRef.current.querySelector(`[data-line="${targetLine}"]`);
+      if (lineEl) {
+        lineEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
     }
-  }, [targetLine, code]);   // also re-run when code changes (new file loaded)
-
-  const scrollToLine = (editor, monaco, line) => {
-    if (!line || line < 1) return;
-
-    // Clear previous highlights
-    const model = editor.getModel();
-    if (!model) return;
-    editor.deltaDecorations(
-      model.getAllDecorations()
-           .filter(d => d.options.className === "hl-line")
-           .map(d => d.id),
-      []
-    );
-
-    // Add new highlight on the target line
-    editor.deltaDecorations([], [
-      {
-        range: new monaco.Range(line, 1, line, 9999),
-        options: {
-          isWholeLine: true,
-          className:   "hl-line",
-        },
-      },
-    ]);
-
-    // Smooth scroll so the line appears centered
-    editor.revealLineInCenter(line, monaco.editor.ScrollType.Smooth);
-  };
-
-  const getLang = (fname) => {
-    if (!fname) return "plaintext";
-    const ext = fname.split(".").pop().toLowerCase();
-    return { py:"python", js:"javascript",
-             c:"c", h:"c", cpp:"cpp", hpp:"cpp" }[ext] || "plaintext";
-  };
+  }, [code, targetLine]);
 
   return (
-    <div style={s.panel}>
-
-      {/* Header bar */}
-      <div style={s.header}>
-        {filename ? (
-          <div style={s.fileInfo}>
-            <span style={s.dot} />
-            <span style={s.filename} title={filename}>{filename}</span>
-            {targetLine && (
-              <span style={s.lineTag}>line {targetLine}</span>
-            )}
-          </div>
-        ) : (
-          <span style={s.placeholder}>Code Viewer</span>
+    <div className="code-viewer">
+      <div className="code-viewer-header">
+        <div className="code-file-name">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+          </svg>
+          {filename
+            ? <><span>{filename.split('/').pop()}</span></>
+            : <span style={{ opacity: 0.4 }}>No file loaded</span>
+          }
+        </div>
+        {targetLine && (
+          <span style={{ fontSize: 10, color: 'var(--accent)', fontFamily: 'var(--font-mono)' }}>
+            line {targetLine}
+          </span>
         )}
       </div>
 
-      {/* Editor or empty state */}
-      {code ? (
-        <>
-          <style>{`
-            .hl-line {
-              background: rgba(255,184,0,0.18) !important;
-              border-left: 3px solid #ffb800 !important;
-            }
-          `}</style>
-          <div style={{ flex:1, overflow:"hidden" }}>
-            <Editor
-              height="100%"
-              language={getLang(filename)}
-              value={code}
-              theme="vs-dark"
-              onMount={handleMount}
-              options={{
-                readOnly:             true,
-                fontSize:             12,
-                fontFamily:           "JetBrains Mono, monospace",
-                lineNumbers:          "on",
-                minimap:              { enabled: false },
-                scrollBeyondLastLine: false,
-                wordWrap:             "off",
-                glyphMargin:          false,
-                folding:              true,
-                renderLineHighlight:  "none",
-                scrollbar: {
-                  vertical:               "visible",
-                  horizontal:             "visible",
-                  verticalScrollbarSize:  6,
-                  horizontalScrollbarSize:6,
-                },
-              }}
-            />
-          </div>
-        </>
+      {!code ? (
+        <div className="code-empty">
+          <div className="code-empty-icon">{'</>'}</div>
+          <div className="code-empty-text">Click a node to view its source</div>
+        </div>
       ) : (
-        <div style={s.empty}>
-          <div style={s.emptyIcon}>{"{ }"}</div>
-          <p style={s.emptyTitle}>Click any node</p>
-          <p style={s.emptyText}>
-            to jump to its definition<br/>in the source file
-          </p>
+        <div className="code-scroll" ref={scrollRef}>
+          <pre>
+            {code.split('\n').map((line, i) => {
+              const lineNum = i + 1;
+              return (
+                <div key={lineNum} data-line={lineNum}>
+                  <CodeLine
+                    lineNumber={lineNum}
+                    content={line}
+                    isHighlighted={targetLine && lineNum === targetLine}
+                  />
+                </div>
+              );
+            })}
+          </pre>
         </div>
       )}
     </div>
   );
 }
-
-const s = {
-  panel:       { display:"flex", flexDirection:"column",
-                 height:"100%", background:"#1e1e2e" },
-  header:      { display:"flex", alignItems:"center",
-                 padding:"0 0.75rem", height:38, flexShrink:0,
-                 background:"#12121a",
-                 borderBottom:"1px solid var(--border)" },
-  fileInfo:    { display:"flex", alignItems:"center",
-                 gap:8, overflow:"hidden", width:"100%" },
-  dot:         { width:8, height:8, borderRadius:"50%",
-                 background:"var(--amber)", flexShrink:0 },
-  filename:    { fontSize:11, fontFamily:"var(--font-mono)",
-                 color:"var(--text)", overflow:"hidden",
-                 textOverflow:"ellipsis", whiteSpace:"nowrap", flex:1 },
-  lineTag:     { fontSize:10, color:"var(--amber)",
-                 fontFamily:"var(--font-mono)", flexShrink:0,
-                 background:"rgba(255,184,0,0.12)",
-                 padding:"1px 6px", borderRadius:4 },
-  placeholder: { fontSize:11, color:"var(--muted)",
-                 fontFamily:"var(--font-mono)" },
-  empty:       { flex:1, display:"flex", flexDirection:"column",
-                 alignItems:"center", justifyContent:"center",
-                 gap:8 },
-  emptyIcon:   { fontSize:36, color:"var(--border)",
-                 fontFamily:"var(--font-mono)", fontWeight:700 },
-  emptyTitle:  { fontSize:13, color:"var(--muted)",
-                 fontFamily:"var(--font-head)", fontWeight:600 },
-  emptyText:   { fontSize:11, color:"var(--muted)", textAlign:"center",
-                 lineHeight:1.8, fontFamily:"var(--font-mono)" },
-};

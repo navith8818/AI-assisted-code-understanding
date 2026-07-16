@@ -7,7 +7,7 @@ import ChatBot from "../components/ChatBot.jsx";
 export default function Home() {
   return (
     <main style={styles.container}>
-      <HeaderNotLogged />
+      
       <Hero />
       
       <ChatBot />
