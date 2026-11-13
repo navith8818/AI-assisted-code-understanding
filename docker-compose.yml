@@ -1,0 +1,66 @@
+services:
+  mongodb:
+    image: mongo:7.0
+    container_name: flowgen-mongodb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - flowgen-net
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: flowgen-backend
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - MONGODB_URL=mongodb://mongodb:27017
+      - DB_NAME=codeanalyzer
+      - SECRET_KEY=${SECRET_KEY:-thisissomethinglongandsecret123456}
+      - ALGORITHM=HS256
+      - ACCESS_TOKEN_EXPIRE_MINUTES=60
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
+      - ENVIRONMENT=production
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    volumes:
+      - backend_uploads:/app/uploads
+    networks:
+      - flowgen-net
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: flowgen-frontend
+    restart: unless-stopped
+    ports:
+      - "5173:80"
+      - "3000:80"
+    depends_on:
+      - backend
+    networks:
+      - flowgen-net
+
+volumes:
+  mongodb_data:
+    name: flowgen_mongodb_data
+  backend_uploads:
+    name: flowgen_backend_uploads
+
+networks:
+  flowgen-net:
+    name: flowgen-network
+    driver: bridge

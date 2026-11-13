@@ -1,0 +1,70 @@
+services:
+  mongodb:
+    image: mongo:7.0
+    container_name: flowgen-mongodb-dev
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_dev_data:/data/db
+    networks:
+      - flowgen-dev-net
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: flowgen-backend-dev
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - MONGODB_URL=mongodb://mongodb:27017
+      - DB_NAME=codeanalyzer
+      - SECRET_KEY=thisissomethinglongandsecret123456
+      - ALGORITHM=HS256
+      - ACCESS_TOKEN_EXPIRE_MINUTES=60
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
+      - ENVIRONMENT=development
+    volumes:
+      - ./backend:/app
+      - /app/.venv
+      - /app/__pycache__
+    command: ["uvicorn", "server:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    networks:
+      - flowgen-dev-net
+
+  frontend:
+    image: node:20-alpine
+    container_name: flowgen-frontend-dev
+    working_dir: /app
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_BASE_URL=http://localhost:8000
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    command: sh -c "npm install && npm run dev -- --host 0.0.0.0"
+    depends_on:
+      - backend
+    networks:
+      - flowgen-dev-net
+
+volumes:
+  mongodb_dev_data:
+    name: flowgen_mongodb_dev_data
+
+networks:
+  flowgen-dev-net:
+    name: flowgen-dev-network
+    driver: bridge

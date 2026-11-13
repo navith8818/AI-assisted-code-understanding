@@ -1,4 +1,6 @@
 # Virtual Environment
+.venv/
+backend/.venv/
 myenv/
 venv/
 ENV/
@@ -52,3 +54,14 @@ build/
 # Logs
 *.log
 npm-debug.log*
+
+# Uploads
+# Uploads
+backend/uploads/*
+!backend/uploads/.gitkeep
+!backend/uploads/example.zip
+!backend/uploads/files.zip
+!backend/uploads/main.zip
+!backend/uploads/example/**
+!backend/uploads/files/**
+!backend/uploads/main/**

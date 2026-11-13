@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import GraphPanel from './GraphPanel.jsx';
 import CodeViewer from './CodeViewer.jsx';
+import { API_BASE_URL } from '../api.js';
 
 const TYPE_COLOR = {
   function: '#00e5ff',
@@ -118,7 +119,7 @@ export default function DashboardView({ result, projectName, onReset }) {
 
     // ── Fetch source code from backend ──────────────────────
     try {
-      const res = await fetch('http://localhost:8000/api/file-content', {
+      const res = await fetch(`${API_BASE_URL}/api/file-content`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -142,7 +143,7 @@ export default function DashboardView({ result, projectName, onReset }) {
         } else {
           setAiLoading(true);
           try {
-            const aiRes = await fetch('http://localhost:8000/api/explain', {
+            const aiRes = await fetch(`${API_BASE_URL}/api/explain`, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({ node_id: nodeId, snippet, type }),

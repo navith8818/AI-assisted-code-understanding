@@ -15,7 +15,17 @@ def _load_language(language_module, language_name):
     except TypeError:
         return Language(language_module.language())
 
-UPLOAD_DIR = "uploads"
+
+def _new_parser(language):
+    parser = Parser()
+    if hasattr(parser, "language"):
+        parser.language = language
+    else:
+        parser.set_language(language)
+    return parser
+
+
+UPLOAD_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "uploads")
 
 # ─────────────────────────────────────────────
 # File helpers (unchanged)
@@ -42,10 +52,10 @@ def init_parsers():
     CPP_LANG = _load_language(tree_sitter_cpp, "cpp")
     JS_LANG  = _load_language(tree_sitter_javascript, "javascript")
 
-    py_parser  = Parser(); py_parser.language = PY_LANG
-    c_parser   = Parser(); c_parser.language = C_LANG
-    cpp_parser = Parser(); cpp_parser.language = CPP_LANG
-    js_parser  = Parser(); js_parser.language = JS_LANG
+    py_parser  = _new_parser(PY_LANG)
+    c_parser   = _new_parser(C_LANG)
+    cpp_parser = _new_parser(CPP_LANG)
+    js_parser  = _new_parser(JS_LANG)
 
     return {
         ".py":  py_parser,
